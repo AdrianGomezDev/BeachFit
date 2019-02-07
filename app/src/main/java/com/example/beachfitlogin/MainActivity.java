@@ -18,14 +18,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView userText = (TextView) findViewById(R.id.textView);
+        TextView userText = (TextView) findViewById(R.id.usernameEditText);
         //EditText userEdit = (EditText) findViewById(R.id.editText2);
         String content = userText.getText().toString();
         userText.setText(content);
 
         userText.setTextColor(Color.BLACK);
 
-        TextView passText = (TextView) findViewById(R.id.textView2);
+        TextView passText = (TextView) findViewById(R.id.passEditText);
 
 
 
