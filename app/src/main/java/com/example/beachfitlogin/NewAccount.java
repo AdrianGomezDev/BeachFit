@@ -42,26 +42,29 @@ public class NewAccount extends AppCompatActivity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
+
                 // checks if all fields in the new user activity page are empty
-                if(isEmpty(userText) || isEmpty(passText)|| isEmpty(repassText)|| isEmpty(firstText)|| isEmpty(lastText)|| isEmpty(emailText)|| isEmpty(ageText)){
+                if(isEmpty(userText) || isEmpty(passText)|| isEmpty(repassText)|| isEmpty(firstText)|| isEmpty(lastText)|| isEmpty(emailText)|| isEmpty(ageText)) {
                     Toast.makeText(getApplicationContext(), "Please enter all required fields.",
                             Toast.LENGTH_LONG).show();
                 }
-
-
                 // checks if the password and retype password fields match
-                if(!(passText.getText().toString().equals(repassText.getText().toString()))){
+                else if(!(passText.getText().toString().equals(repassText.getText().toString()))){
                     Toast.makeText(getApplicationContext(), "Password fields must match.",
                             Toast.LENGTH_LONG).show();
                 }
+                else
+                {
+                    int ageInt = Integer.parseInt(ageText.getText().toString());
 
-                int ageInt = Integer.parseInt(ageText.getText().toString());
-
-                // checks that age is between 1 and 99.
-                if(ageInt > 99 || ageInt < 1){
-                    Toast.makeText(getApplicationContext(), "Age must be between 1-99.",
-                            Toast.LENGTH_LONG).show();
+                    // checks that age is between 1 and 99.
+                    if(ageInt > 99 || ageInt < 1){
+                        Toast.makeText(getApplicationContext(), "Age must be between 1-99.",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
+
+
 
 
             }

@@ -15,6 +15,15 @@ import com.example.beachfitlogin.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean isEmpty(EditText eText){
+        if(eText.getText().toString().trim().length() > 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     int loginAttempts = 0;
 
     @Override
@@ -45,13 +54,11 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
 
-                // finish();
-                // System.exit(0);
-
-
-
-
-                if((userText.getText().toString().equals("admin")) && (passText.getText().toString().equals("1234"))){
+                if(isEmpty(userText) || isEmpty(passText)){
+                    Toast.makeText(getApplicationContext(), "Please enter all required fields.",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if((userText.getText().toString().equals("admin")) && (passText.getText().toString().equals("1234"))){
                     Toast.makeText(getApplicationContext(), "Login is successful!",
                             Toast.LENGTH_LONG).show();
                     // resets login attempts on successful login
