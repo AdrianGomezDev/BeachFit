@@ -13,6 +13,7 @@ import com.example.beachfitlogin.R;
 
 public class NewAccount extends AppCompatActivity {
 
+    // method to check if edit text is empty
     private boolean isEmpty(EditText eText){
         if(eText.getText().toString().trim().length() > 0){
             return false;
@@ -22,24 +23,37 @@ public class NewAccount extends AppCompatActivity {
         }
     }
 
+    // variables
+    EditText userText;
+    EditText passText;
+    EditText repassText;
+    EditText firstText;
+    EditText lastText;
+    EditText emailText;
+    EditText ageText;
+    Button saveButton;
+    Button cancelButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_account);
 
-        final EditText userText = (EditText) findViewById(R.id.userText);
-        final EditText passText = (EditText) findViewById(R.id.passText);
-        final EditText repassText = (EditText) findViewById(R.id.repassText);
-        final EditText firstText = (EditText) findViewById(R.id.firstText);
-        final EditText lastText = (EditText) findViewById(R.id.lastText);
-        final EditText emailText = (EditText) findViewById(R.id.emailText);
-        final EditText ageText = (EditText) findViewById(R.id.ageText);
+        // initialize text fields
+        userText = (EditText) findViewById(R.id.userText);
+        passText = (EditText) findViewById(R.id.passText);
+        repassText = (EditText) findViewById(R.id.repassText);
+        firstText = (EditText) findViewById(R.id.firstText);
+        lastText = (EditText) findViewById(R.id.lastText);
+        emailText = (EditText) findViewById(R.id.emailText);
+        ageText = (EditText) findViewById(R.id.ageText);
 
         //button for saving
         // TEMPORARILY FOR CHECKING NEW ACCOUNT FIELDS
-        Button saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setKeyListener(null);
 
+        // on click listener to check edit text field requirements
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
 
@@ -55,6 +69,7 @@ public class NewAccount extends AppCompatActivity {
                 }
                 else
                 {
+                    // parses int from edit text field
                     int ageInt = Integer.parseInt(ageText.getText().toString());
 
                     // checks that age is between 1 and 99.
@@ -63,17 +78,13 @@ public class NewAccount extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                 }
-
-
-
-
             }
         });
 
         // button for canceling new user creation and return to login page
-        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        cancelButton = (Button) findViewById(R.id.cancelButton);
         cancelButton.setKeyListener(null);
-
+        // on click listener finishes the activity
         cancelButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 finish();
