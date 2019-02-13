@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     // resets login attempts on successful login
                     loginAttempts=0;
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
                 }
                 // else will give warning and log attempts.
                 else {
