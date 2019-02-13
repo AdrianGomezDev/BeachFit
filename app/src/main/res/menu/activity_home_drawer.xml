@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_fitness"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Fitness" />
+        <item
+            android:id="@+id/nav_diet"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Diet" />
+        <item
+            android:id="@+id/nav_progress_photos"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Progress Photos" />
+        <item
+            android:id="@+id/nav_qr_scanner"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="QR Scanner" />
+        <item
+            android:id="@+id/nav_goals"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Goals" />
+        <item
+            android:id="@+id/nav_analytics"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Analytics" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>
