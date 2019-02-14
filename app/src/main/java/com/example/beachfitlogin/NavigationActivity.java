@@ -16,8 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Fitness.OnFragmentInteractionListener{
+public class NavigationActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        Fitness.OnFragmentInteractionListener, Home.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,11 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        displaySelectedScreen(R.id.fragment_container);
+        // Creates and displays the home fragment
+        Fragment home = new Home();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, home);
+        ft.commit();
     }
 
     @Override
@@ -82,62 +87,49 @@ public class HomeActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_fitness) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_diet) {
-//
-//        } else if (id == R.id.nav_progress_photos) {
-//
-//        } else if (id == R.id.nav_qr_scanner) {
-//
-//        } else if (id == R.id.nav_goals) {
-//
-//        } else if (id == R.id.nav_analytics) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
+        // Handle navigation view item clicks here.
 
-        displaySelectedScreen(item.getItemId());
-        return true;
-    }
-
-    private void displaySelectedScreen(int itemId) {
-
-        //creating fragment object
-        Fragment fragment1 = null;
-
-        fragment1 = new Fitness();
+        Fragment newFragment = null;
 
         //initializing the fragment object which is selected
-//        switch (itemId) {
-//            case R.id.nav_fitness:
-//                fragment = new Menu1();
-//                break;
-//            case R.id.nav_menu2:
-//                fragment = new Menu2();
-//                break;
-//            case R.id.nav_menu3:
-//                fragment = new Menu3();
-//                break;
-//        }
+        switch (item.getItemId()) {
+            case R.id.nav_fitness:
+                newFragment = new Fitness();
+                break;
+            case R.id.nav_diet:
+                // ToDo: Create diet fragment
+                break;
+            case R.id.nav_progress_photos:
+                // ToDo: Create progress photos fragment
+                break;
+            case R.id.nav_qr_scanner:
+                // ToDo: Create qr scanner fragment
+                break;
+            case R.id.nav_goals:
+                // ToDo: Create goals fragment
+                break;
+            case R.id.nav_rewards:
+                // ToDo: Create rewards fragment
+                break;
+            case R.id.nav_analytics:
+                // ToDo: Create analytics fragment
+                break;
+            case R.id.nav_share:
+                // ToDo: Create share fragment
+                break;
+        }
 
-        //replacing the fragment
-        if (fragment1 != null) {
+        //Replace the current fragment with the selected fragment
+        if (newFragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment1);
+            ft.replace(R.id.fragment_container, newFragment);
             ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-    }
+        return true;
+        }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

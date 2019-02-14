@@ -4,14 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.beachfitlogin.R;
-
-public class NewAccount extends AppCompatActivity {
+public class NewAccountActivity extends AppCompatActivity {
 
     // method to check if edit text is empty
     private boolean isEmpty(EditText eText){

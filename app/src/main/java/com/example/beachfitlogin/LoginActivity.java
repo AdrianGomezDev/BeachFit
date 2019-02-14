@@ -1,18 +1,15 @@
 package com.example.beachfitlogin;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.example.beachfitlogin.R;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     // method to check if an edit text is empty
     private boolean isEmpty(EditText eText){
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         userText = (EditText) findViewById(R.id.usernameEditText);
         passText = (EditText) findViewById(R.id.passEditText);
 
-        // ImageView for beachfit logo initialization
+        // ImageView for beachfitlogin logo initialization
         logoImg = (ImageView) findViewById(R.id.logoView);
         logoImg.setImageResource(R.drawable.beachfitlogo);
 
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     // resets login attempts on successful login
                     loginAttempts=0;
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    startActivity(new Intent(LoginActivity.this, NavigationActivity.class));
                 }
                 // else will give warning and log attempts.
                 else {
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         // set on click listener for intent to go to new account activity.
         newUserButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, NewAccount.class));
+                startActivity(new Intent(LoginActivity.this, NewAccountActivity.class));
             }
 
         });

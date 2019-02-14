@@ -10,12 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomeActivity"
+            android:name="com.example.beachfitlogin.NavigationActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".NewAccount" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.beachfitlogin.NewAccountActivity" />
+        <activity android:name="com.example.beachfitlogin.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

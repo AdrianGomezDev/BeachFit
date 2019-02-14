@@ -25,6 +25,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Goals" />
         <item
+            android:id="@+id/nav_rewards"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Rewards"/>
+        <item
             android:id="@+id/nav_analytics"
             android:icon="@drawable/ic_menu_camera"
             android:title="Analytics" />
