@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView logoImg;
     Button loginButton;
     Button newUserButton;
+    Button cameraButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, NewAccount.class));
             }
 
+        });
+
+        //Cam Test button
+        cameraButton = (Button) findViewById(R.id.camerabutton);
+        cameraButton.setKeyListener(null);
+        cameraButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                startActivity(new Intent(MainActivity.this, QR_Scan.class));
+            }
         });
     }
 }
