@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -34,7 +35,8 @@ public class QR_Scan extends AppCompatActivity {
                 if (data != null)
                 {
                     Barcode barcode = data.getParcelableExtra("barcode");
-                    barcodeResult.setText("Barcode value:" +barcode.displayValue);
+                    barcodeResult.setText("P"+barcode.displayValue+"P");
+                    barcodeCheck(barcode);
                 }else{
                     barcodeResult.setText("No barcode found");
                 }
@@ -42,6 +44,16 @@ public class QR_Scan extends AppCompatActivity {
 
         }else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    protected void barcodeCheck(Barcode barcode){
+        Toast.makeText(getApplicationContext(), "BarcodeCheck", Toast.LENGTH_LONG).show();
+        if(barcode.displayValue.contentEquals("Hi")){
+            startActivity(new Intent(QR_Scan.this, NewAccount.class));
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"Does not match", Toast.LENGTH_LONG).show();
         }
     }
 }
