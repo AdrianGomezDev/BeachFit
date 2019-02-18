@@ -5,41 +5,45 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/home" />
+        <item
             android:id="@+id/nav_fitness"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Fitness" />
+            android:title="@string/fitness" />
         <item
             android:id="@+id/nav_diet"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Diet" />
+            android:title="@string/diet" />
         <item
             android:id="@+id/nav_progress_photos"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Progress Photos" />
+            android:title="@string/progress_photos" />
         <item
             android:id="@+id/nav_qr_scanner"
             android:icon="@drawable/ic_menu_manage"
-            android:title="QR Scanner" />
+            android:title="@string/qr_scanner" />
         <item
             android:id="@+id/nav_goals"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Goals" />
+            android:title="@string/goals" />
         <item
             android:id="@+id/nav_rewards"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Rewards"/>
+            android:title="@string/rewards"/>
         <item
             android:id="@+id/nav_analytics"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Analytics" />
+            android:title="@string/analytics" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/share" />
         </menu>
     </item>
 

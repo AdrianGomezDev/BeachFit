@@ -30,4 +30,14 @@
     <string name="signed_out">Currently Signed Out</string>
     <string name="emailpassword_title_text">Welcome to BeachFit!</string>
     <string name="auth_failed">Authentication Failed.</string>
+    <string name="home">Home</string>
+    <string name="fitness">Fitness</string>
+    <string name="diet">Diet</string>
+    <string name="progress_photos">Progress Photos</string>
+    <string name="qr_scanner">QR Scanner</string>
+    <string name="goals">Goals</string>
+    <string name="rewards">Rewards</string>
+    <string name="analytics">Analytics</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
 </resources>

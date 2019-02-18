@@ -23,7 +23,7 @@
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:text="@string/signed_out"
         app:layout_constraintBottom_toTopOf="@+id/fieldEmail"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +41,7 @@
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:imeOptions="actionNext"
+        android:background="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/fieldPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +58,7 @@
         android:hint="@string/hint_password"
         android:inputType="textPassword"
         android:imeOptions="actionDone"
+        android:background="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/login_buttons"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +69,7 @@
 
     <LinearLayout
         android:id="@+id/login_buttons"
-        android:layout_width="268dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginLeft="70dp"
