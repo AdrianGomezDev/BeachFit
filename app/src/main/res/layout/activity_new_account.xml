@@ -10,7 +10,7 @@
     tools:context=".NewAccountActivity">
 
     <EditText
-        android:id="@+id/userText"
+        android:id="@+id/usernameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -22,7 +22,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/passText"
+        android:id="@+id/passwordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -34,7 +34,7 @@
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/repassText"
+        android:id="@+id/rePasswordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -46,7 +46,7 @@
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/firstText"
+        android:id="@+id/firstNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -58,7 +58,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/lastText"
+        android:id="@+id/lastNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"

@@ -12,10 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static String TAG= "EmailPassword";
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private TextView mStatusTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
@@ -33,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login_firebase);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Views
         mStatusTextView = findViewById(R.id.status);
@@ -51,6 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            currentUser.reload();
+        }
         updateUI(currentUser);
     }
 
@@ -235,10 +247,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_ACCOUNT_REQUEST) {
             if(resultCode == RESULT_OK) {
+                mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+                    @Override
+                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                        if(mAuth.getCurrentUser() != null){
+                            Map<String, Object> user = new HashMap<>();
+                            user.put( "username", data.getStringExtra("username"));
+                            user.put(    "email", data.getStringExtra("email"));
+                            user.put("firstName", data.getStringExtra("firstName"));
+                            user.put( "lastName", data.getStringExtra("lastName"));
+                            user.put(      "age", data.getStringExtra("age"));
+
+                            // Add a new document with a generated ID
+                            db.collection("users")
+                                    .add(user)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
+                            mAuth.removeAuthStateListener(this);
+                        }
+                    }
+                });
+
                 createAccount(data.getStringExtra("email"), data.getStringExtra("password"));
             }
         }
