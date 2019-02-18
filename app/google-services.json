@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "652823577011",
+    "firebase_url": "https://beachfit-1730e.firebaseio.com",
+    "project_id": "beachfit-1730e",
+    "storage_bucket": "beachfit-1730e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652823577011:android:5641c1921a7549bb",
+        "android_client_info": {
+          "package_name": "com.example.beachfitlogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652823577011-r93gal153on2jklhcea2ilefc4k3t2cm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.beachfitlogin",
+            "certificate_hash": "410bac5aaa0e4a059ac68f4a560b9ed5d7b811fe"
+          }
+        },
+        {
+          "client_id": "652823577011-ih59rbrhegc0gcq1vife98pliv2eq80a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGNEH01L6J5cthzDW3L44VDBDaaznlKfk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652823577011-ih59rbrhegc0gcq1vife98pliv2eq80a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

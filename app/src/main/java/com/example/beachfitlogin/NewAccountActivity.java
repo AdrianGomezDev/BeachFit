@@ -1,7 +1,8 @@
 package com.example.beachfitlogin;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
@@ -27,13 +28,14 @@ public class NewAccountActivity extends AppCompatActivity {
     EditText lastText;
     EditText emailText;
     EditText ageText;
-    Button saveButton;
+    Button submitButton;
     Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_account);
+        this.setFinishOnTouchOutside(false);
 
         // initialize text fields
         userText = (EditText) findViewById(R.id.userText);
@@ -46,11 +48,11 @@ public class NewAccountActivity extends AppCompatActivity {
 
         //button for saving
         // TEMPORARILY FOR CHECKING NEW ACCOUNT FIELDS
-        saveButton = (Button) findViewById(R.id.saveButton);
-        saveButton.setKeyListener(null);
+        submitButton = (Button) findViewById(R.id.submitButton);
+        submitButton.setKeyListener(null);
 
         // on click listener to check edit text field requirements
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
 
                 // checks if all fields in the new user activity page are empty
@@ -63,16 +65,19 @@ public class NewAccountActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password fields must match.",
                             Toast.LENGTH_LONG).show();
                 }
-                else
+                // Checks if age is too old or young
+                else if(Integer.parseInt(ageText.getText().toString()) > 99 || Integer.parseInt(ageText.getText().toString()) < 1)
                 {
-                    // parses int from edit text field
-                    int ageInt = Integer.parseInt(ageText.getText().toString());
-
-                    // checks that age is between 1 and 99.
-                    if(ageInt > 99 || ageInt < 1){
-                        Toast.makeText(getApplicationContext(), "Age must be between 1-99.",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getApplicationContext(), "Age must be between 1-99.",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    // TODO: Need to save the rest of the user data in the database
+                    Intent intent = new Intent();
+                    intent.putExtra("email", emailText.getText().toString());
+                    intent.putExtra("password", passText.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         });
@@ -85,7 +90,6 @@ public class NewAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
             }
-
         });
     }
 }
