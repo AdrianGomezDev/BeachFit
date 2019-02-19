@@ -25,7 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        Fitness.OnFragmentInteractionListener, Home.OnFragmentInteractionListener{
+        Fitness.OnFragmentInteractionListener, Home.OnFragmentInteractionListener,
+        QRScanner.OnFragmentInteractionListener, Diet.OnFragmentInteractionListener,
+        ProgressPhotos.OnFragmentInteractionListener, Goals.OnFragmentInteractionListener,
+        Rewards.OnFragmentInteractionListener, Analytics.OnFragmentInteractionListener,Share.OnFragmentInteractionListener{
 
     private FirebaseAuth mAuth;
 
@@ -127,25 +130,25 @@ public class NavigationActivity extends AppCompatActivity
                 newFragment = new Fitness();
                 break;
             case R.id.nav_diet:
-                // ToDo: Create diet fragment
+                newFragment = new Diet();
                 break;
             case R.id.nav_progress_photos:
-                // ToDo: Create progress photos fragment
+                newFragment = new ProgressPhotos();
                 break;
             case R.id.nav_qr_scanner:
-                // ToDo: Create qr scanner fragment
+                newFragment = new QRScanner();
                 break;
             case R.id.nav_goals:
-                // ToDo: Create goals fragment
+                newFragment = new Goals();
                 break;
             case R.id.nav_rewards:
-                // ToDo: Create rewards fragment
+                newFragment = new Rewards();
                 break;
             case R.id.nav_analytics:
-                // ToDo: Create analytics fragment
+                newFragment = new Analytics();
                 break;
             case R.id.nav_share:
-                // ToDo: Create share fragment
+                newFragment = new Share();
                 break;
         }
 
