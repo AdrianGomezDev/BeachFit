@@ -243,6 +243,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(user.isEmailVerified()) {
             Intent myIntent = new Intent(LoginActivity.this, NavigationActivity.class);
             LoginActivity.this.startActivity(myIntent);
+            finish();
         }
         else{
             displayToast("Please verify email");
