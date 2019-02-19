@@ -27,7 +27,7 @@
     <string name="create_account">Create Account</string>
     <string name="sign_in">Sign In</string>
     <string name="desc_beachfit_logo">BeachFit Logo</string>
-    <string name="signed_out">Currently Signed Out</string>
+    <string name="signed_out">Sign In to Begin</string>
     <string name="emailpassword_title_text">Welcome to BeachFit!</string>
     <string name="auth_failed">Authentication Failed.</string>
     <string name="home">Home</string>
@@ -40,4 +40,10 @@
     <string name="analytics">Analytics</string>
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
+    <string name="error_weak_password">Must be 6 characters minimum.</string>
+    <string name="error_invalid_email">Invalid email.</string>
+    <string name="error_user_exists">Email already used.</string>
+    <string name="error_mismatched_passwords">Passwords must match.</string>
+    <string name="error_invalid_age">Age must be between 1-99.</string>
+    <string name="required_field">Required.</string>
 </resources>
