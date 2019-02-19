@@ -50,7 +50,7 @@ public class QR_Scan extends AppCompatActivity {
     protected void barcodeCheck(Barcode barcode){
         Toast.makeText(getApplicationContext(), "BarcodeCheck", Toast.LENGTH_LONG).show();
         if(barcode.displayValue.contentEquals("Hi")){
-            startActivity(new Intent(QR_Scan.this, NewAccount.class));
+            startActivity(new Intent(QR_Scan.this, Fitness.class));
         }
         else{
             Toast.makeText(getApplicationContext(),"Does not match", Toast.LENGTH_LONG).show();
