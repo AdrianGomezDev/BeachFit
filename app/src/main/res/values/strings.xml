@@ -47,4 +47,7 @@
     <string name="error_mismatched_passwords">Passwords must match.</string>
     <string name="error_invalid_age">Age must be between 1-99.</string>
     <string name="required_field">Required.</string>
+    <string name="log_meal">Log Meal</string>
+    <string name="search_food_database">Search Food Database</string>
+    <string name="calorie_calculator">Calorie Calculator</string>
 </resources>

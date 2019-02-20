@@ -101,7 +101,7 @@ public class QRScanner extends Fragment {
                 if (data != null)
                 {
                     Barcode barcode = data.getParcelableExtra("barcode");
-                    barcodeResultText.setText("P"+barcode.displayValue+"P");
+                    barcodeResultText.setText("QR Code Result: " + barcode.displayValue);
                     barcodeCheck(barcode);
                 }else{
                     barcodeResultText.setText("No barcode found");
