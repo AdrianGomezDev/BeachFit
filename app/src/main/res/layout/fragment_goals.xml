@@ -6,9 +6,10 @@
     tools:context=".Goals">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="#e2b43d"/>
+
 
 </FrameLayout>
