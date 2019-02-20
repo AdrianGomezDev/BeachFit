@@ -85,7 +85,7 @@ public class QRScanner extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Camera.class);
-                startActivityForResult(intent,CAMERA_REQUEST);
+                startActivityForResult(intent, CAMERA_REQUEST);
             }
         });
 
