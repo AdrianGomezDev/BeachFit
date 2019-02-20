@@ -1,4 +1,0 @@
-<changelist name="Merge_branches_'Gerardo'_and_'master'_of_https___github_com_AdrianGomezDev_BeachFit_into_G" date="1550204998378" recycled="false">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Merge_branches_'Gerardo'_and_'master'_of_https___github_com_AdrianGomezDev_BeachFit_into_G/shelved.patch" />
-  <option name="DESCRIPTION" value="Merge branches 'Gerardo' and 'master' of https://github.com/AdrianGomezDev/BeachFit into Gerardo  # Conflicts: #&#9;app/build.gradle #&#9;app/src/main/AndroidManifest.xml #&#9;app/src/main/res/values/dimens.xml #&#9;app/src/main/res/values/strings.xml" />
-</changelist>
