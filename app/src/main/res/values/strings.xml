@@ -40,6 +40,7 @@
     <string name="analytics">Analytics</string>
     <string name="communicate">Communicate</string>
     <string name="share">Share</string>
+    <string name="scanqr">Scan QR</string>
     <string name="error_weak_password">Must be 6 characters minimum.</string>
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_user_exists">Email already used.</string>
