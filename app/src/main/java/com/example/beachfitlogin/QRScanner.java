@@ -1,12 +1,20 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 
 
 /**
@@ -27,7 +35,12 @@ public class QRScanner extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public static final int CAMERA_REQUEST = 2412;
+
     private OnFragmentInteractionListener mListener;
+
+    private Button scanButton;
+    private TextView barcodeResultText;
 
     public QRScanner() {
         // Required empty public constructor
@@ -64,8 +77,54 @@ public class QRScanner extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("QR Scanner");
+        View view = inflater.inflate(R.layout.fragment_qrscanner, container, false);
+
+        barcodeResultText = view.findViewById(R.id.barcodeResultText);
+        scanButton = view.findViewById(R.id.scanButton);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Camera.class);
+                startActivityForResult(intent,CAMERA_REQUEST);
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_qrscanner, container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == CAMERA_REQUEST){
+            if (resultCode == CommonStatusCodes.SUCCESS)
+            {
+                if (data != null)
+                {
+                    Barcode barcode = data.getParcelableExtra("barcode");
+                    barcodeResultText.setText("P"+barcode.displayValue+"P");
+                    barcodeCheck(barcode);
+                }else{
+                    barcodeResultText.setText("No barcode found");
+                }
+            }
+
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    protected void barcodeCheck(Barcode barcode){
+        Toast.makeText(getActivity(), "BarcodeCheck", Toast.LENGTH_LONG).show();
+        if(barcode.displayValue.contentEquals("Hi")){
+            Fitness nextFrag= new Fitness();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, nextFrag, "findThisQRScannerFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }
+        else{
+            Toast.makeText(getActivity(),"Does not match", Toast.LENGTH_LONG).show();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -12,18 +12,18 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 public class QR_Scan extends AppCompatActivity {
-    TextView barcodeResult;
+    TextView barcodeResultText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr__scan);
-        barcodeResult = (TextView)findViewById(R.id.barcode_result);
+        barcodeResultText = (TextView)findViewById(R.id.barcodeResultText);
 
 
     }
     public void scanBarcode(View view)
     {
-        Intent intent = new Intent(this, camera.class);
+        Intent intent = new Intent(this, Camera.class);
         startActivityForResult(intent,0);
     }
 
@@ -35,10 +35,10 @@ public class QR_Scan extends AppCompatActivity {
                 if (data != null)
                 {
                     Barcode barcode = data.getParcelableExtra("barcode");
-                    barcodeResult.setText("P"+barcode.displayValue+"P");
+                    barcodeResultText.setText("P"+barcode.displayValue+"P");
                     barcodeCheck(barcode);
                 }else{
-                    barcodeResult.setText("No barcode found");
+                    barcodeResultText.setText("No barcode found");
                 }
             }
 
