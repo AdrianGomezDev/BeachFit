@@ -114,7 +114,6 @@ public class Fitness extends Fragment{
         return layout;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String exerciseName) {
         if (mListener != null) {
             mListener.onFragmentMessage("Fitness", exerciseName);

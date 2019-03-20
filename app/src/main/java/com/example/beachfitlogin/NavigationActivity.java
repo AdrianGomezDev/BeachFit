@@ -172,14 +172,19 @@ public class NavigationActivity extends AppCompatActivity
         //TODO: Handles fragment messages
         if (TAG.equals("Fitness")){
             // Open exercise fragment using exercise name sent from fitness fragment
-            Exercise newFragment= Exercise.newInstance(data.toString());
+            Exercise newFragment = Exercise.newInstance(data.toString());
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, newFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
-        else if (TAG.equals("TAGFragment2")){
-            //Do something with 'data' that comes from fragment2
+        else if (TAG.equals("Exercise")){
+            // Open YoutubeVideo Fragment using exercise name sent from exercise fragment
+            YouTubeVideo newFragment = YouTubeVideo.newInstance(data.toString());
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, newFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 }

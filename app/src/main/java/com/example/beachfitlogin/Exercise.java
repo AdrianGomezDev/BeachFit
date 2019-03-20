@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +32,8 @@ public class Exercise extends Fragment{
     private TextView muscleText;
     private TextView equipmentText;
     private ListView instructionsList;
+
+    private Button playButton;
 
     private ExerciseObject exerciseObject;
 
@@ -92,22 +95,29 @@ public class Exercise extends Fragment{
             });
 
         }
-        
+
         exerciseText = layout.findViewById(R.id.exercise_name_text_view);
         typeText = layout.findViewById(R.id.type_text_view);
         levelText = layout.findViewById(R.id.level_text_view);
         muscleText = layout.findViewById(R.id.muscle_text_view);
         equipmentText = layout.findViewById(R.id.equipment_text_view);
         instructionsList = layout.findViewById(R.id.instructions_list_view);
+        playButton = layout.findViewById(R.id.playVideoButton);
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onButtonPressed(exerciseObject.getVideo());
+            }
+        });
 
         // Inflate the layout for this fragment
         return layout;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String videoID) {
         if (mListener != null) {
-            mListener.onFragmentMessage(TAG, uri);
+            mListener.onFragmentMessage(TAG, videoID);
         }
     }
 

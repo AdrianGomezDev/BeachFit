@@ -9,18 +9,20 @@ public class ExerciseObject {
     private String Level;
     private String Muscle;
     private String Type;
+    private String Video;
 
     private ArrayList<String> Instructions;
 
     public ExerciseObject() { }
 
     public ExerciseObject(String Name, String Equipment, String Level, String Muscle, String Type,
-                          String[] Instructions) {
+                          String Video, String[] Instructions) {
         this.Name = Name;
         this.Equipment = Equipment;
         this.Level = Level;
         this.Muscle = Muscle;
         this.Type = Type;
+        this.Video = Video;
         this.Instructions = new ArrayList<String>(Arrays.asList(Instructions));
     }
 
@@ -63,6 +65,10 @@ public class ExerciseObject {
     public void setType(String type) {
         Type = type;
     }
+
+    public String getVideo() { return Video; }
+
+    public void setVideo(String video) { Video = video; }
 
     public ArrayList<String> getInstructions() {
         return Instructions;
