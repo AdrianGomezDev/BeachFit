@@ -50,4 +50,5 @@
     <string name="log_meal">Log Meal</string>
     <string name="search_food_database">Search Food Database</string>
     <string name="calorie_calculator">Calorie Calculator</string>
+    <string name="Forgot_Password">Forgot Password?</string>
 </resources>
