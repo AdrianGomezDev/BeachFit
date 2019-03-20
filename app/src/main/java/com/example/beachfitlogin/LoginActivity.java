@@ -209,6 +209,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                         if(mAuth.getCurrentUser() != null){
+                            if(!mAuth.getCurrentUser().isEmailVerified()){
+                                sendEmailVerification();
+                            }
                             Map<String, Object> user = new HashMap<>();
                             user.put( "username", data.getStringExtra("username"));
                             user.put(    "email", data.getStringExtra("email"));
@@ -218,11 +221,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             // Add a new document with a generated ID
                             db.collection("users")
-                                    .add(user)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    .document(mAuth.getCurrentUser().getUid())
+                                    .set(user)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        public void onSuccess(Void aVoid) {
+                                            Log.w(TAG, "Added user to firestore.");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

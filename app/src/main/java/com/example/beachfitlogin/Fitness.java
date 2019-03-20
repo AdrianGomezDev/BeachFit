@@ -4,20 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Fitness.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Fitness#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Fitness extends Fragment {
+public class Fitness extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,6 +28,8 @@ public class Fitness extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private FirestoreRecyclerAdapter<ExerciseObject, ExerciseIndexHolder> adapter;
 
     public Fitness() {
         // Required empty public constructor
@@ -64,14 +66,58 @@ public class Fitness extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Fitness");
+        View layout = inflater.inflate(R.layout.fragment_fitness, container, false);
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+
+        // Set up RecyclerView
+        RecyclerView recyclerView = layout.findViewById(R.id.fitnessRecyclerView);
+        // Add dividers to recyclerView
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(getContext().getResources().getDrawable(R.drawable.line_divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(layoutManager);
+
+        //Fetch Exercises from Firestore
+        Query query = FirebaseFirestore.getInstance().collection("Exercises")
+                .orderBy("Name", Query.Direction.ASCENDING);
+
+        FirestoreRecyclerOptions<ExerciseObject> options = new FirestoreRecyclerOptions.Builder<ExerciseObject>()
+                .setQuery(query, ExerciseObject.class)
+                .build();
+
+        adapter = new FirestoreRecyclerAdapter<ExerciseObject, ExerciseIndexHolder>(options) {
+
+            @Override
+            public void onBindViewHolder(ExerciseIndexHolder holder, int position, ExerciseObject exerciseModel) {
+                final String exerciseName = exerciseModel.getName();
+                holder.setExerciseName(exerciseName);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onButtonPressed(exerciseName);
+                    }
+                });
+            }
+
+            @Override
+            public ExerciseIndexHolder onCreateViewHolder(ViewGroup group, int i) {
+                View view = LayoutInflater.from(group.getContext())
+                        .inflate(R.layout.exercise_index, group, false);
+
+                return new ExerciseIndexHolder(view);
+            }
+        };
+        recyclerView.setAdapter(adapter);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fitness, container, false);
+        return layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String exerciseName) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentMessage("Fitness", exerciseName);
         }
     }
 
@@ -92,18 +138,15 @@ public class Fitness extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

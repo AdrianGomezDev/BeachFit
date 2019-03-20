@@ -25,10 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        Fitness.OnFragmentInteractionListener, Home.OnFragmentInteractionListener,
-        QRScanner.OnFragmentInteractionListener, Diet.OnFragmentInteractionListener,
-        ProgressPhotos.OnFragmentInteractionListener, Goals.OnFragmentInteractionListener,
-        Rewards.OnFragmentInteractionListener, Analytics.OnFragmentInteractionListener,Share.OnFragmentInteractionListener{
+        OnFragmentInteractionListener{
 
     private FirebaseAuth mAuth;
 
@@ -88,8 +85,12 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else if(getFragmentManager().getBackStackEntryCount() == 0) {
             super.onBackPressed();
+        }
+        else {
+            getFragmentManager().popBackStack();
         }
     }
 
@@ -152,10 +153,11 @@ public class NavigationActivity extends AppCompatActivity
                 break;
         }
 
-        //Replace the current fragment with the selected fragment
+        // Replace the current fragment with the selected fragment
         if (newFragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, newFragment);
+            ft.addToBackStack(null);
             ft.commit();
         }
 
@@ -164,8 +166,20 @@ public class NavigationActivity extends AppCompatActivity
         return true;
         }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
+    @Override
+    public void onFragmentMessage(String TAG, Object data) {
+        //TODO: Handles fragment messages
+        if (TAG.equals("Fitness")){
+            // Open exercise fragment using exercise name sent from fitness fragment
+            Exercise newFragment= Exercise.newInstance(data.toString());
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, newFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+        else if (TAG.equals("TAGFragment2")){
+            //Do something with 'data' that comes from fragment2
+        }
     }
 }
