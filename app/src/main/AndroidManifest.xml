@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.example.beachfitlogin.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,6 +24,7 @@
             android:name="com.example.beachfitlogin.NewAccountActivity"
             android:label="@string/create_account"
             android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustResize"
             android:excludeFromRecents="true">
         </activity>
         <activity
