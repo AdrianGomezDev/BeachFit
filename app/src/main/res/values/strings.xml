@@ -23,7 +23,7 @@
     <string name="hint_email">Enter Email</string>
     <string name="hint_password">Enter Password</string>
     <string name="sign_out">Sign Out</string>
-    <string name="verify_email">Resend Verification Email</string>
+    <string name="verify_email">Verify Email</string>
     <string name="create_account">Create Account</string>
     <string name="sign_in">Sign In</string>
     <string name="desc_beachfit_logo">BeachFit Logo</string>
@@ -50,6 +50,7 @@
     <string name="log_meal">Log Meal</string>
     <string name="search_food_database">Search Food Database</string>
     <string name="calorie_calculator">Calorie Calculator</string>
+    <string name="Forgot_Password">Forgot Password?</string>
     <string name="type">Type:</string>
     <string name="exercise_type">Exercise Type</string>
     <string name="level">Level:</string>
