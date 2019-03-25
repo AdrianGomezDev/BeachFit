@@ -4,15 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class YouTubeVideo extends Fragment {
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
+public class YouTubeVideo extends YouTubePlayerSupportFragment {
     private static final String ARG_VIDEO_ID = "VideoID";
     private static final String TAG = "YouTubeVideo";
 
+    // TODO: Remove this hardcoded API key later
+    private static final String API_KEY = "AIzaSyBGNEH01L6J5cthzDW3L44VDBDaaznlKfk";
+
     private OnFragmentInteractionListener mListener;
+
+    private YouTubePlayer activePlayer;
 
     public YouTubeVideo() {
         // Required empty public constructor
@@ -25,7 +36,6 @@ public class YouTubeVideo extends Fragment {
      * @param videoID Video id needed to play the youtube video
      * @return A new instance of fragment YouTubeVideo.
      */
-    // TODO: Rename and change types and number of parameters
     public static YouTubeVideo newInstance(String videoID) {
         YouTubeVideo fragment = new YouTubeVideo();
         Bundle args = new Bundle();
@@ -38,21 +48,23 @@ public class YouTubeVideo extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-        }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_you_tube_video, container, false);
-    }
+            initialize(API_KEY, new YouTubePlayer.OnInitializedListener() {
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentMessage(TAG, uri);
+                @Override
+                public void onInitializationFailure(YouTubePlayer.Provider arg0, YouTubeInitializationResult arg1) {
+                    Log.d(TAG, "onInitializationFailure: ");
+                }
+
+                @Override
+                public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+                    activePlayer = player;
+                    activePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                    if (!wasRestored) {
+                        activePlayer.loadVideo(getArguments().getString(ARG_VIDEO_ID));
+                    }
+                }
+            });
         }
     }
 

@@ -62,4 +62,7 @@
     <string name="exercise_name">Exercise Name</string>
     <string name="instructions">Instructions</string>
     <string name="watch_video">Watch Video</string>
+    <string name="player_error">Error initializing YouTube player: %s</string>
+    <string name="seek_to">Jump To</string>
+    <string name="seek_to_hint">Seconds</string>
 </resources>
