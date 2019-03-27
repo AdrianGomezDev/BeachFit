@@ -31,6 +31,7 @@
         <activity
             android:name="com.example.beachfitlogin.NavigationActivity"
             android:label="@string/title_activity_home"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
