@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".Diet">
-
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:gravity="center">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="50dp"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
         android:gravity="center">
-
-        <Button
-            android:id="@+id/logMealButton"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/foodSearchBar"
+            android:layout_weight="9"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/log_meal"/>
-
-        <Button
-            android:id="@+id/searchFoodDatabaseButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/search_food_database"/>
-
-        <Button
-            android:id="@+id/calorieCalculatorButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/calorie_calculator"/>
-
+            android:inputType="text"
+            android:hint="@string/search_the_food_database"
+            tools:ignore="Autofill" />
+        <ImageButton
+            android:id="@+id/foodSearchButton"
+            android:background="@color/colorAccent"
+            android:baselineAlignBottom="false"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:contentDescription="@string/food_search_button"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/round_search_black_24" />
     </LinearLayout>
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/searchResponseView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/suggestionsRecyclerView"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+        </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
+</LinearLayout>

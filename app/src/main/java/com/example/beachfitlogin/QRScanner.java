@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import static android.app.Activity.RESULT_CANCELED;
 
 public class QRScanner extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +40,7 @@ public class QRScanner extends Fragment{
 
     private Button scanButton;
     private TextView barcodeResultText;
+    private FirebaseFirestore mFirestore;
 
     public QRScanner() {
         // Required empty public constructor
@@ -86,42 +95,27 @@ public class QRScanner extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == CAMERA_REQUEST){
-            if (resultCode == CommonStatusCodes.SUCCESS)
-            {
-                if (data != null)
-                {
-                    Barcode barcode = data.getParcelableExtra("barcode");
-                    barcodeResultText.setText("QR Code Result: " + barcode.displayValue);
-                    barcodeCheck(barcode);
-                }else{
-                    barcodeResultText.setText("No barcode found");
+        if(requestCode != RESULT_CANCELED) {
+            if (requestCode == CAMERA_REQUEST) {
+                if (resultCode == CommonStatusCodes.SUCCESS) {
+                    if (data != null) {
+                        Barcode barcode = data.getParcelableExtra("barcode");
+                        //onScanResult(barcode.displayValue);
+                        queryCollection(barcode);
+                    } else {
+                        barcodeResultText.setText("No barcode found");
+                    }
                 }
+
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
             }
-
-        }else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    protected void barcodeCheck(Barcode barcode){
-        Toast.makeText(getActivity(), "BarcodeCheck", Toast.LENGTH_LONG).show();
-        if(barcode.displayValue.contentEquals("Hi")){
-            Fitness nextFrag= new Fitness();
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, nextFrag, "findThisQRScannerFragment")
-                    .addToBackStack(null)
-                    .commit();
-        }
-        else{
-            Toast.makeText(getActivity(),"Does not match", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onScanResult(String exerciseName) {
         if (mListener != null) {
-            mListener.onFragmentMessage("QRScanner", uri);
+            mListener.onFragmentMessage("QR Scanner", exerciseName);
         }
     }
 
@@ -140,5 +134,29 @@ public class QRScanner extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+    // This function takes the displayValue of the barcode and check it against the Firestore db
+    private void queryCollection(Barcode b)
+    {
+        DocumentReference exercise = mFirestore.collection("Exercises").document(b.displayValue);
+        exercise.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc.exists()) {
+                        onScanResult(doc.get("Name").toString());
+                    }
+                }
+                else {
+                    Toast.makeText(getActivity(),"Does not match", Toast.LENGTH_LONG).show();
+                    barcodeResultText.setText("No matching exercise found");
+                }
+
+            }
+        });
     }
 }

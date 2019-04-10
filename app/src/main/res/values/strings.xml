@@ -65,4 +65,6 @@
     <string name="player_error">Error initializing YouTube player: %s</string>
     <string name="seek_to">Jump To</string>
     <string name="seek_to_hint">Seconds</string>
+    <string name="search_the_food_database">Search the Food Database</string>
+    <string name="food_search_button">Food Search Button</string>
 </resources>

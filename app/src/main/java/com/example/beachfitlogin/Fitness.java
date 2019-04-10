@@ -1,13 +1,13 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class Fitness extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -63,9 +65,9 @@ public class Fitness extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Fitness");
+        Objects.requireNonNull(getActivity()).setTitle("Fitness");
         View layout = inflater.inflate(R.layout.fragment_fitness, container, false);
         LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
 
@@ -74,11 +76,11 @@ public class Fitness extends Fragment{
         // Add dividers to recyclerView
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(getContext().getResources().getDrawable(R.drawable.line_divider));
+        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
 
-        //Fetch Exercises from Firestore
+        //Fetch Exercises from FireStore
         Query query = FirebaseFirestore.getInstance().collection("Exercises")
                 .orderBy("Name", Query.Direction.ASCENDING);
 
@@ -89,7 +91,7 @@ public class Fitness extends Fragment{
         adapter = new FirestoreRecyclerAdapter<ExerciseObject, ExerciseIndexHolder>(options) {
 
             @Override
-            public void onBindViewHolder(ExerciseIndexHolder holder, int position, ExerciseObject exerciseModel) {
+            public void onBindViewHolder(@NonNull ExerciseIndexHolder holder, int position, @NonNull ExerciseObject exerciseModel) {
                 final String exerciseName = exerciseModel.getName();
                 holder.setExerciseName(exerciseName);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +102,9 @@ public class Fitness extends Fragment{
                 });
             }
 
+            @NonNull
             @Override
-            public ExerciseIndexHolder onCreateViewHolder(ViewGroup group, int i) {
+            public ExerciseIndexHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
                 View view = LayoutInflater.from(group.getContext())
                         .inflate(R.layout.exercise_index, group, false);
 

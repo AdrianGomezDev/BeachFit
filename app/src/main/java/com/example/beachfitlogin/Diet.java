@@ -2,11 +2,26 @@ package com.example.beachfitlogin;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Objects;
 
 public class Diet extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -14,9 +29,17 @@ public class Diet extends Fragment{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final String INSTANT_SEARCH_URL = "https://trackapi.nutritionix.com/v2/search/instant?";
+    private static final String NUTRITIONIX_APP_ID = "31017349";
+    private static final String NUTRITIONIX_API_KEY = "24958b5962bf0cf6010622eefb73504a";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EditText searchBarView;
+    private ProgressBar progressBar;
+    private TextView responseView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,11 +75,42 @@ public class Diet extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Diet");
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_diet, container, false);
+        Objects.requireNonNull(getActivity()).setTitle("Diet");
+
+        View layout = inflater.inflate(R.layout.fragment_diet, container, false);
+
+        searchBarView = layout.findViewById(R.id.foodSearchBar);
+        searchBarView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                new RetrieveSearchSuggestionsTask().execute();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        responseView = layout.findViewById(R.id.searchResponseView);
+        progressBar = layout.findViewById(R.id.searchProgressBar);
+
+        ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RetrieveSearchSuggestionsTask().execute();
+            }
+        });
+
+        return layout; // Inflate the layout for this fragment
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -81,5 +135,52 @@ public class Diet extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private class RetrieveSearchSuggestionsTask extends AsyncTask<Void, Void, String> {
+
+        private String query;
+
+        protected void onPreExecute() {
+            query = searchBarView.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
+            responseView.setText("");
+        }
+
+        protected String doInBackground(Void... urls) {
+            try {
+                URL url = new URL(INSTANT_SEARCH_URL + "query=" + query);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("x-app-id", NUTRITIONIX_APP_ID);
+                urlConnection.setRequestProperty("x-app-key", NUTRITIONIX_API_KEY);
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                }
+                finally{
+                    urlConnection.disconnect();
+                }
+            }
+            catch(Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            if(response == null) {
+                response = "THERE WAS AN ERROR";
+            }
+            progressBar.setVisibility(View.GONE);
+            Log.i("INFO", response);
+            responseView.setText(response);
+        }
     }
 }
