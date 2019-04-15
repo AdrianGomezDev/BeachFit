@@ -35,15 +35,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Diet extends Fragment{
+public class Diet extends Fragment implements FoodAdapter.OnFoodClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private static final String INSTANT_SEARCH_URL = "https://trackapi.nutritionix.com/v2/search/instant?";
-    private static final String NUTRITIONIX_APP_ID = "31017349";
-    private static final String NUTRITIONIX_API_KEY = "24958b5962bf0cf6010622eefb73504a";
+    private static final String NUTRITION_INFO_URL = "https://trackapi.nutritionix.com/v2/natural/nutrients?";
+//    private static final String NUTRITIONIX_APP_ID = "31017349";
+//    private static final String NUTRITIONIX_API_KEY = "24958b5962bf0cf6010622eefb73504a";
+    private static final String NUTRITIONIX_APP_ID = "81c57972";
+    private static final String NUTRITIONIX_API_KEY = "ed2c50519010c1b21a2207e7559890e1";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -163,6 +166,53 @@ public class Diet extends Fragment{
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onFoodClick(int position) {
+        String foodName = foodList.get(position).getFoodName();
+        new RetrieveNutritionInfoTask().execute(foodName);
+    }
+
+    //TODO: incomplete
+    private class RetrieveNutritionInfoTask extends AsyncTask<String, Void, String> {
+
+        protected  void onPreExecute() {
+            suggestionsRecycler.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(NUTRITION_INFO_URL + "query=" + params[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("x-app-id", NUTRITIONIX_APP_ID);
+                urlConnection.setRequestProperty("x-app-key", NUTRITIONIX_API_KEY);
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                }
+                finally{
+                    urlConnection.disconnect();
+                }
+            }
+            catch(Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+
+        }
+    }
+
 
     private class RetrieveSearchSuggestionsTask extends AsyncTask<Void, Void, String> {
 
