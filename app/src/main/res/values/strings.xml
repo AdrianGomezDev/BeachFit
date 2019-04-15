@@ -62,4 +62,5 @@
     <string name="exercise_name">Exercise Name</string>
     <string name="instructions">Instructions</string>
     <string name="watch_video">Watch Video</string>
+    <string name="Send_Reset_Email">Send Reset Email</string>
 </resources>
