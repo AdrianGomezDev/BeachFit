@@ -3,7 +3,7 @@ package com.example.beachfitlogin;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ExerciseObject {
+public class ExerciseModel {
     private String Name;
     private String Equipment;
     private String Level;
@@ -13,10 +13,10 @@ public class ExerciseObject {
 
     private ArrayList<String> Instructions;
 
-    public ExerciseObject() { }
+    public ExerciseModel() { }
 
-    public ExerciseObject(String Name, String Equipment, String Level, String Muscle, String Type,
-                          String Video, String[] Instructions) {
+    public ExerciseModel(String Name, String Equipment, String Level, String Muscle, String Type,
+                         String Video, String[] Instructions) {
         this.Name = Name;
         this.Equipment = Equipment;
         this.Level = Level;

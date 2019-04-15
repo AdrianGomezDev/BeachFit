@@ -1,10 +1,9 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static java.util.Objects.isNull;
+import java.util.Objects;
 
 public class Exercise extends Fragment{
 
@@ -33,9 +32,7 @@ public class Exercise extends Fragment{
     private TextView equipmentText;
     private ListView instructionsList;
 
-    private Button playButton;
-
-    private ExerciseObject exerciseObject;
+    private ExerciseModel exerciseModel;
 
     public Exercise() {
         // Required empty public constructor
@@ -61,12 +58,12 @@ public class Exercise extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            //if we pass an argument to exercise fragment, handle it here
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View layout = inflater.inflate(R.layout.fragment_exercise, container, false);
@@ -75,20 +72,20 @@ public class Exercise extends Fragment{
             String exerciseName = getArguments().getString(ARG_EXERCISE_NAME);
             readData(exerciseName, new FirestoreCallback() {
                 @Override
-                public void onCallBack(ExerciseObject exerciseObject) {
+                public void onCallBack(ExerciseModel exerciseModel) {
 
                     // Populate TextViews
-                    exerciseText.setText(exerciseObject.getName());
-                    typeText.setText(exerciseObject.getType());
-                    levelText.setText(exerciseObject.getLevel());
-                    muscleText.setText(exerciseObject.getMuscle());
-                    equipmentText.setText(exerciseObject.getEquipment());
+                    exerciseText.setText(exerciseModel.getName());
+                    typeText.setText(exerciseModel.getType());
+                    levelText.setText(exerciseModel.getLevel());
+                    muscleText.setText(exerciseModel.getMuscle());
+                    equipmentText.setText(exerciseModel.getEquipment());
 
                     //Populate instructions in ListView
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                            getContext(),
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                            Objects.requireNonNull(getContext()),
                             android.R.layout.simple_list_item_1,
-                            exerciseObject.getInstructions()
+                            exerciseModel.getInstructions()
                     );
                     instructionsList.setAdapter(arrayAdapter);
                 }
@@ -102,12 +99,12 @@ public class Exercise extends Fragment{
         muscleText = layout.findViewById(R.id.muscle_text_view);
         equipmentText = layout.findViewById(R.id.equipment_text_view);
         instructionsList = layout.findViewById(R.id.instructions_list_view);
-        playButton = layout.findViewById(R.id.playVideoButton);
+        Button playButton = layout.findViewById(R.id.playVideoButton);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onButtonPressed(exerciseObject.getVideo());
+                onButtonPressed(exerciseModel.getVideo());
             }
         });
 
@@ -146,13 +143,13 @@ public class Exercise extends Fragment{
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        exerciseObject = documentSnapshot.toObject(ExerciseObject.class);
-                        firestoreCallback.onCallBack(exerciseObject);
+                        exerciseModel = documentSnapshot.toObject(ExerciseModel.class);
+                        firestoreCallback.onCallBack(exerciseModel);
                     }
                 });
     }
 
     private interface FirestoreCallback {
-        void onCallBack(ExerciseObject exerciseObject);
+        void onCallBack(ExerciseModel exerciseModel);
     }
 }

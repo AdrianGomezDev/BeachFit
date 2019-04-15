@@ -25,13 +25,9 @@ public class Fitness extends Fragment{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    private FirestoreRecyclerAdapter<ExerciseObject, ExerciseIndexHolder> adapter;
+    private FirestoreRecyclerAdapter<ExerciseModel, ExerciseIndexHolder> adapter;
 
     public Fitness() {
         // Required empty public constructor
@@ -58,10 +54,6 @@ public class Fitness extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -84,14 +76,14 @@ public class Fitness extends Fragment{
         Query query = FirebaseFirestore.getInstance().collection("Exercises")
                 .orderBy("Name", Query.Direction.ASCENDING);
 
-        FirestoreRecyclerOptions<ExerciseObject> options = new FirestoreRecyclerOptions.Builder<ExerciseObject>()
-                .setQuery(query, ExerciseObject.class)
+        FirestoreRecyclerOptions<ExerciseModel> options = new FirestoreRecyclerOptions.Builder<ExerciseModel>()
+                .setQuery(query, ExerciseModel.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<ExerciseObject, ExerciseIndexHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<ExerciseModel, ExerciseIndexHolder>(options) {
 
             @Override
-            public void onBindViewHolder(@NonNull ExerciseIndexHolder holder, int position, @NonNull ExerciseObject exerciseModel) {
+            public void onBindViewHolder(@NonNull ExerciseIndexHolder holder, int position, @NonNull ExerciseModel exerciseModel) {
                 final String exerciseName = exerciseModel.getName();
                 holder.setExerciseName(exerciseName);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {

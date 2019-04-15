@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,11 +18,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Diet extends Fragment{
@@ -39,8 +48,10 @@ public class Diet extends Fragment{
 
     private EditText searchBarView;
     private ProgressBar progressBar;
-    private TextView responseView;
+    private RecyclerView suggestionsRecycler;
 
+    private FoodAdapter foodAdapter;
+    private List<FoodModel> foodList;
     private OnFragmentInteractionListener mListener;
 
     public Diet() {
@@ -90,17 +101,24 @@ public class Diet extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                new RetrieveSearchSuggestionsTask().execute();
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if(searchBarView.getText().toString().isEmpty()){
+                    foodList.clear();
+                    foodAdapter = new FoodAdapter(foodList);
+                    suggestionsRecycler.setAdapter(foodAdapter);
+                }
+                new RetrieveSearchSuggestionsTask().execute();
             }
         });
 
-        responseView = layout.findViewById(R.id.searchResponseView);
         progressBar = layout.findViewById(R.id.searchProgressBar);
+        suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
+        suggestionsRecycler.setHasFixedSize(true);
+        suggestionsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -142,13 +160,19 @@ public class Diet extends Fragment{
         private String query;
 
         protected void onPreExecute() {
-            query = searchBarView.getText().toString();
+            if(searchBarView.getText().toString().isEmpty()){
+                query = "nothing";
+            }
+            else{
+                query = searchBarView.getText().toString();
+            }
             progressBar.setVisibility(View.VISIBLE);
-            responseView.setText("");
+            suggestionsRecycler.setVisibility(View.GONE);
         }
 
         protected String doInBackground(Void... urls) {
             try {
+                foodList = new ArrayList<>();
                 URL url = new URL(INSTANT_SEARCH_URL + "query=" + query);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -176,11 +200,37 @@ public class Diet extends Fragment{
 
         protected void onPostExecute(String response) {
             if(response == null) {
-                response = "THERE WAS AN ERROR";
+                response = "THERE WAS AN ERROR!";
+                Log.d("Error", "onPostExecute: response = null");
             }
             progressBar.setVisibility(View.GONE);
+            suggestionsRecycler.setVisibility(View.VISIBLE);
             Log.i("INFO", response);
-            responseView.setText(response);
+
+            try {
+                List<String> tagNameList = new ArrayList<>();
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray array = jsonObject.getJSONArray("common");
+                for(int i = 0; i < array.length(); i++){
+                    JSONObject jo = array.getJSONObject(i);
+                    if(tagNameList.isEmpty()){
+                        tagNameList.add(jo.getString("tag_name"));
+                        FoodModel foodModel = new FoodModel(jo.getString("food_name"),
+                                Uri.parse(jo.getJSONObject("photo").getString("thumb")));
+                        foodList.add(foodModel);
+                    }
+                    else if(!tagNameList.contains(jo.getString("tag_name"))){
+                        tagNameList.add(jo.getString("tag_name"));
+                        FoodModel foodModel = new FoodModel(jo.getString("food_name"),
+                                Uri.parse(jo.getJSONObject("photo").getString("thumb")));
+                        foodList.add(foodModel);
+                    }
+                }
+                foodAdapter = new FoodAdapter(foodList);
+                suggestionsRecycler.setAdapter(foodAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
