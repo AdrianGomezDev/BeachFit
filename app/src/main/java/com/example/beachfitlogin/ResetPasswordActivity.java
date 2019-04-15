@@ -14,18 +14,17 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
-    EditText userEmail;
-    Button userPass;
+    private EditText userEmail;
+    private Button userPass;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
-
         userEmail = findViewById(R.id.fieldEmail);
-        userPass = findViewById(R.id.forgotPasswordButton);
+        userPass = findViewById(R.id.sendResetEmail);
 
         firebaseAuth = firebaseAuth.getInstance();
 
@@ -36,7 +35,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(ResetPasswordActivity.this, "Password sent to your email", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ResetPasswordActivity.this, "Password reset email has been sent", Toast.LENGTH_LONG).show();
                         } else{
                             Toast.makeText(ResetPasswordActivity.this,
                                     task.getException().getMessage(), Toast.LENGTH_LONG).show();
