@@ -34,6 +34,11 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/rewards"/>
         <item
+            android:id="@+id/nav_step_counter"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Step Counter"
+            />
+        <item
             android:id="@+id/nav_analytics"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/analytics" />

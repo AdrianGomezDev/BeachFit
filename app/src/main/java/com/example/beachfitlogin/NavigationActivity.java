@@ -136,6 +136,9 @@ public class NavigationActivity extends AppCompatActivity
             case R.id.nav_analytics:
                 newFragment = new Analytics();
                 break;
+            case R.id.nav_step_counter:
+                newFragment = new StepCounter();
+                break;
             case R.id.nav_share:
                 newFragment = new Share();
                 break;
