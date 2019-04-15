@@ -3,7 +3,6 @@
     package="com.example.beachfitlogin">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ResetPasswordActivity"></activity>
         <activity
-            android:name="com.example.beachfitlogin.LoginActivity"
+            android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -23,21 +23,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.beachfitlogin.NewAccountActivity"
+            android:name=".NewAccountActivity"
+            android:excludeFromRecents="true"
             android:label="@string/create_account"
             android:theme="@style/Theme.AppCompat.Dialog"
-            android:windowSoftInputMode="adjustResize"
-            android:excludeFromRecents="true">
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity
-            android:name="com.example.beachfitlogin.NavigationActivity"
+            android:name=".NavigationActivity"
             android:label="@string/title_activity_home"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Camera"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>

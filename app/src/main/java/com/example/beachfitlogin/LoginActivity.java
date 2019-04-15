@@ -201,6 +201,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    public void passwordReset(View view) {
+        Intent startNewActivity = new Intent(this, ResetPasswordActivity.class);
+        startActivity(startNewActivity);
+    }
+
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_ACCOUNT_REQUEST) {

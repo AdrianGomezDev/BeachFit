@@ -103,6 +103,7 @@
                 android:layout_width="186dp"
                 android:layout_height="36dp"
                 android:text="@string/Forgot_Password"
+                android:onClick="passwordReset"
                 android:visibility="visible" />
 
             <Button
