@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -48,6 +51,7 @@ public class Diet extends Fragment{
 
     private EditText searchBarView;
     private ProgressBar progressBar;
+    private NestedScrollView scrollView;
     private RecyclerView suggestionsRecycler;
 
     private FoodAdapter foodAdapter;
@@ -91,6 +95,9 @@ public class Diet extends Fragment{
         Objects.requireNonNull(getActivity()).setTitle("Diet");
 
         View layout = inflater.inflate(R.layout.fragment_diet, container, false);
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+
+        scrollView = layout.findViewById(R.id.suggestionsScroll);
 
         searchBarView = layout.findViewById(R.id.foodSearchBar);
         searchBarView.addTextChangedListener(new TextWatcher() {
@@ -106,19 +113,21 @@ public class Diet extends Fragment{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(searchBarView.getText().toString().isEmpty()){
-                    foodList.clear();
-                    foodAdapter = new FoodAdapter(foodList);
-                    suggestionsRecycler.setAdapter(foodAdapter);
-                }
                 new RetrieveSearchSuggestionsTask().execute();
             }
         });
 
         progressBar = layout.findViewById(R.id.searchProgressBar);
+
         suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
         suggestionsRecycler.setHasFixedSize(true);
-        suggestionsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestionsRecycler.getContext(),
+                layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
+        suggestionsRecycler.addItemDecoration(dividerItemDecoration);
+        suggestionsRecycler.setLayoutManager(layoutManager);
+
+        foodList = new ArrayList<>();
 
         ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +181,6 @@ public class Diet extends Fragment{
 
         protected String doInBackground(Void... urls) {
             try {
-                foodList = new ArrayList<>();
                 URL url = new URL(INSTANT_SEARCH_URL + "query=" + query);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -208,6 +216,7 @@ public class Diet extends Fragment{
             Log.i("INFO", response);
 
             try {
+                foodList.clear();
                 List<String> tagNameList = new ArrayList<>();
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray array = jsonObject.getJSONArray("common");
@@ -228,6 +237,7 @@ public class Diet extends Fragment{
                 }
                 foodAdapter = new FoodAdapter(foodList);
                 suggestionsRecycler.setAdapter(foodAdapter);
+                scrollView.scrollTo(0,0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
