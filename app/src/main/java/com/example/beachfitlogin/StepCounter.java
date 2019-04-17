@@ -11,10 +11,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StepCounter extends Fragment implements SensorEventListener {
+public class StepCounter extends Fragment implements SensorEventListener, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,6 +31,7 @@ public class StepCounter extends Fragment implements SensorEventListener {
     private Sensor mSensorStep;
     private TextView mCount;
     boolean activityRunning;
+    private Button mResetButton;
 
     //////////////////////////////////
 
@@ -75,6 +77,7 @@ public class StepCounter extends Fragment implements SensorEventListener {
 
         mCount = getActivity().findViewById(R.id.count);
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mResetButton = getActivity().findViewById(R.id.reset);
 
 
         return view;
@@ -126,11 +129,20 @@ public class StepCounter extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mCount.setText(String.valueOf(event.values[0]));
+        mCount.setText(String.valueOf(Math.round(event.values[0])));
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.reset) {
+            mCount.setText(String.valueOf(Math.round(0)));
+        }
 
     }
 }
