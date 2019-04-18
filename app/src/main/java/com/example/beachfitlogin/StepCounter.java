@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,8 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     private TextView mCount;
     boolean activityRunning;
     private Button mResetButton;
+    private int stepCounter = 0;
+    //private ImageView runImage;
 
     //////////////////////////////////
 
@@ -73,11 +76,13 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
                              Bundle savedInstanceState) {
         getActivity().setTitle("Step Counter");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_analytics, container, false);
+        View view = inflater.inflate(R.layout.fragment_step_counter, container, false);
 
-        mCount = getActivity().findViewById(R.id.count);
+        mCount = view.findViewById(R.id.count);
+        //runImage = getActivity().findViewById(R.id.stickrun);
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        mResetButton = getActivity().findViewById(R.id.reset);
+        mResetButton = view.findViewById(R.id.reset);
+        mResetButton.setOnClickListener(this);
 
 
         return view;
@@ -129,7 +134,11 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mCount.setText(String.valueOf(Math.round(event.values[0])));
+        if(activityRunning){
+            //mCount.setText(String.valueOf(Math.round(event.values[0])));
+            mCount.setText(String.valueOf(Math.round(stepCounter)));
+            stepCounter++;
+        }
     }
 
     @Override
@@ -140,8 +149,9 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.reset) {
-            mCount.setText(String.valueOf(Math.round(0)));
+    if (i == R.id.reset) {
+            stepCounter = 0;
+            mCount.setText(String.valueOf(0));
         }
 
     }

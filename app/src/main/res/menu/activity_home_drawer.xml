@@ -36,7 +36,7 @@
         <item
             android:id="@+id/nav_step_counter"
             android:icon="@drawable/ic_menu_run"
-            android:title="Step Counter"
+            android:title="@string/step_counter"
             />
         <item
             android:id="@+id/nav_analytics"

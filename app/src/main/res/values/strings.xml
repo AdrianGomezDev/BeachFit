@@ -69,4 +69,5 @@
     <string name="search_the_food_database">Search the Food Database</string>
     <string name="food_search_button">Food Search Button</string>
     <string name="thumbnail_photo_for_food_item">thumbnail photo for food item</string>
+    <string name="step_counter">Step Counter</string>
 </resources>
