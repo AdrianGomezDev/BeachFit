@@ -34,6 +34,7 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     boolean activityRunning;
     private Button mResetButton;
     private int stepCounter = 0;
+    private int tracker = 0;
     //private ImageView runImage;
 
     //////////////////////////////////
@@ -135,9 +136,10 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(activityRunning){
+            stepCounter = Math.round(event.values[0]) - tracker;
             //mCount.setText(String.valueOf(Math.round(event.values[0])));
-            mCount.setText(String.valueOf(Math.round(stepCounter)));
-            stepCounter++;
+            mCount.setText(String.valueOf(stepCounter));
+
         }
     }
 
@@ -150,7 +152,7 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     public void onClick(View v) {
         int i = v.getId();
     if (i == R.id.reset) {
-            stepCounter = 0;
+            tracker =+ stepCounter;
             mCount.setText(String.valueOf(0));
         }
 
