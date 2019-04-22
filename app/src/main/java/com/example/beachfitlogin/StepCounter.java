@@ -1,6 +1,7 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,8 +34,8 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     private TextView mCount;
     boolean activityRunning;
     private Button mResetButton;
-    private int stepCounter = 0;
-    private int tracker = 0;
+    private float stepCounter = 0;
+    private float tracker = 0;
     //private ImageView runImage;
 
     //////////////////////////////////
@@ -76,6 +77,8 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Step Counter");
+        // try to lock the fragment to portrait mode.
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_step_counter, container, false);
 
@@ -132,6 +135,13 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
         activityRunning = false;
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        // Unregister all sensor listeners in this callback so they don't
+        // continue to use resources when the app is paused.
+        mSensorManager.unregisterListener(this);
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
