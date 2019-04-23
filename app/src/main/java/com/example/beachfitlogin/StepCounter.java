@@ -1,6 +1,7 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,6 +10,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,12 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TRACKER_COUNT = "trackerCount";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private float trackCount;
 
     //////////////////////////////////
 
@@ -34,8 +38,9 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     private TextView mCount;
     boolean activityRunning;
     private Button mResetButton;
-    private float stepCounter = 0;
-    private float tracker = 0;
+    private float stepCounter;
+    private float tracker;
+    //private static final String BUNDLE_TRACKER = "BUNDLE_TRACKER";
     //private ImageView runImage;
 
     //////////////////////////////////
@@ -60,6 +65,7 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        //args.putFloat(TRACKER_COUNT,trackCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,15 +73,27 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //if(savedInstanceState != null){
+        //    tracker = savedInstanceState.getFloat(TRACKER_COUNT);
+        //}
+        SharedPreferences sp = getActivity().getPreferences(Context.MODE_PRIVATE);
+        tracker = sp.getFloat(TRACKER_COUNT,0.0f);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            //trackCount = getArguments().getFloat(TRACKER_COUNT);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //if(savedInstanceState != null){
+        //    tracker = savedInstanceState.getFloat(TRACKER_COUNT);
+        //}
+
         getActivity().setTitle("Step Counter");
         // try to lock the fragment to portrait mode.
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -91,6 +109,14 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
 
         return view;
     }
+
+//    public void onSaveInstanceState(Bundle outState){
+//        super.onSaveInstanceState(outState);
+//        outState.putFloat(TRACKER_COUNT,tracker);
+//    }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -138,6 +164,10 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onStop(){
         super.onStop();
+        SharedPreferences sp = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putFloat(TRACKER_COUNT,tracker);
+        editor.commit();
         // Unregister all sensor listeners in this callback so they don't
         // continue to use resources when the app is paused.
         mSensorManager.unregisterListener(this);
@@ -146,9 +176,9 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(activityRunning){
-            stepCounter = Math.round(event.values[0]) - tracker;
+            stepCounter = event.values[0] - tracker;
             //mCount.setText(String.valueOf(Math.round(event.values[0])));
-            mCount.setText(String.valueOf(stepCounter));
+            mCount.setText(String.valueOf(Math.round(stepCounter)));
 
         }
     }
@@ -161,8 +191,8 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
     @Override
     public void onClick(View v) {
         int i = v.getId();
-    if (i == R.id.reset) {
-            tracker =+ stepCounter;
+        if (i == R.id.reset) {
+            tracker = tracker + stepCounter;
             mCount.setText(String.valueOf(0));
         }
 
