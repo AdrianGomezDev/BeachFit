@@ -71,6 +71,7 @@ public class QRScanner extends Fragment{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -100,7 +101,6 @@ public class QRScanner extends Fragment{
                 if (resultCode == CommonStatusCodes.SUCCESS) {
                     if (data != null) {
                         Barcode barcode = data.getParcelableExtra("barcode");
-                        //onScanResult(barcode.displayValue);
                         queryCollection(barcode);
                     } else {
                         barcodeResultText.setText("No barcode found");
@@ -150,10 +150,13 @@ public class QRScanner extends Fragment{
                     if (doc.exists()) {
                         onScanResult(doc.get("Name").toString());
                     }
+                    else
+                    {
+                        Toast.makeText(getActivity(),"No matching QR code found", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else {
-                    Toast.makeText(getActivity(),"Does not match", Toast.LENGTH_LONG).show();
-                    barcodeResultText.setText("No matching exercise found");
+                    Toast.makeText(getActivity(),"Error connecting to the database", Toast.LENGTH_LONG).show();
                 }
 
             }
