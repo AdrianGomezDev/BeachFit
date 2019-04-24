@@ -69,4 +69,13 @@
     <string name="search_the_food_database">Search the Food Database</string>
     <string name="food_search_button">Food Search Button</string>
     <string name="thumbnail_photo_for_food_item">thumbnail photo for food item</string>
+    <string name="food_name">Food Name</string>
+    <string name="nutrient_information">Nutrient Information</string>
+    <string name="food_image">Food Image</string>
+    <string name="add_to_my_food_log">Add to My Food Log</string>
+    <string name="how_many_servings_did_you_eat">How many servings did you eat?:</string>
+    <string name="enter_servings">Enter servings</string>
+    <string name="servings_consumed">Servings Consumed:</string>
+    <string name="date_of_meal">Date of Meal:</string>
+    <string name="mm_dd_yyyy">MM/DD/YYYY</string>
 </resources>
