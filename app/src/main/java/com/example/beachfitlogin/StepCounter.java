@@ -168,8 +168,18 @@ public class StepCounter extends Fragment implements SensorEventListener, View.O
         SharedPreferences.Editor editor = sp.edit();
         editor.putFloat(TRACKER_COUNT,tracker);
         editor.commit();
+        // this should exit from the fragment with ability to still turn screen in other fragments
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         // Unregister all sensor listeners in this callback so they don't
         // continue to use resources when the app is paused.
+
+        //mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        // try to unregister here to see if it works when screen is off.
         mSensorManager.unregisterListener(this);
     }
 

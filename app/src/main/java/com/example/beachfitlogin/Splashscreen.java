@@ -35,16 +35,6 @@ public class Splashscreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
         StartAnimations();
-
-
-        /**imageView = (ImageView)findViewById(R.id.imageView2);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        int[] ids = new int[]{R.drawable.s_img,R.drawable.s_image_black, R.drawable.s_image_black2};
-        Random randomGenerator = new Random();
-        int r= randomGenerator.nextInt(ids.length);
-        this.imageView.setImageDrawable(getResources().getDrawable(ids[r]));*/
-
-
     }
 
     private void StartAnimations(){
