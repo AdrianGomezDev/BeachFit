@@ -197,11 +197,11 @@ public class Diet extends Fragment {
             nutrientsView.setVisibility(View.VISIBLE);
 
             try {
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray array = jsonObject.getJSONArray("foods");
-                JSONObject jo = array.getJSONObject(0);
-
+                JSONObject jo = new JSONObject(response).getJSONArray("foods").getJSONObject(0);
                 Uri foodImage = Uri.parse(jo.getJSONObject("photo").getString("highres"));
+                if(foodImage.equals(Uri.parse("null"))){
+                    foodImage = Uri.parse(jo.getJSONObject("photo").getString("thumb"));
+                }
                 Picasso.get().load(foodImage).into(nutrientsImage);
 
                 final FoodModel foodModel = jsonToFoodModel(jo);
@@ -269,8 +269,7 @@ public class Diet extends Fragment {
             try {
                 foodList.clear();
                 List<String> tagNameList = new ArrayList<>();
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray array = jsonObject.getJSONArray("common");
+                JSONArray array = new JSONObject(response).getJSONArray("common");
                 for(int i = 0; i < array.length(); i++){
                     JSONObject jo = array.getJSONObject(i);
                     if(!tagNameList.contains(jo.getString("tag_name"))){
