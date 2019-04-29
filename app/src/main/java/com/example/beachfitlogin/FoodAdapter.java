@@ -15,23 +15,12 @@ import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView foodNameTextView;
-        ImageView foodPhotoThumb;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-
-            foodNameTextView = itemView.findViewById(R.id.food_text_view);
-            foodPhotoThumb = itemView.findViewById(R.id.food_image);
-        }
-    }
-
+    private OnFoodClickListener mOnFoodClickListener;
     private List<FoodModel> mFoods;
 
-    FoodAdapter(List<FoodModel> foods) {
-        mFoods = foods;
+    FoodAdapter(List<FoodModel> foods, OnFoodClickListener onFoodClickListener) {
+        this.mFoods = foods;
+        this.mOnFoodClickListener = onFoodClickListener;
     }
 
     @NonNull
@@ -42,7 +31,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
         View contactView = inflater.inflate(R.layout.food_item, parent, false);
 
-        return new ViewHolder(contactView);
+        return new ViewHolder(contactView, mOnFoodClickListener);
     }
 
     @Override
@@ -60,6 +49,28 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mFoods.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        TextView foodNameTextView;
+        ImageView foodPhotoThumb;
+        OnFoodClickListener onFoodClickListener;
+
+        ViewHolder(View itemView, OnFoodClickListener onFoodClickListener) {
+            super(itemView);
+
+            this.foodNameTextView = itemView.findViewById(R.id.food_text_view);
+            this.foodPhotoThumb = itemView.findViewById(R.id.food_image);
+            this.onFoodClickListener = onFoodClickListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onFoodClickListener.onFoodClick(getAdapterPosition());
+        }
     }
 
     public interface OnFoodClickListener{
