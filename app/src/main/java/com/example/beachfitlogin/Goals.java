@@ -24,8 +24,6 @@ public class Goals extends Fragment{
 
     private FloatingActionButton newGoal;
 
-
-
     private OnFragmentInteractionListener mListener;
 
     public Goals() {
@@ -68,7 +66,7 @@ public class Goals extends Fragment{
 
         newGoal = view.findViewById(R.id.fab);
 
-        final GoalModel goalModel = new GoalModel("Do 10 sets of Leg Lifts.");
+        final GoalModel goalModel = new GoalModel("");
 
         newGoal.setOnClickListener(new View.OnClickListener(){
             @Override

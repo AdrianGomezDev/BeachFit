@@ -82,4 +82,7 @@
     <string name="goalName">Name:</string>
     <string name="nameofgoal">Enter Name of Goal</string>
     <string name="dateofgoal">Date of Goal</string>
+    <string name="nameofreward">Name:</string>
+    <string name="rewardname">Enter Name of Reward</string>
+    <string name="dateofreward">Date of Reward</string>
 </resources>
