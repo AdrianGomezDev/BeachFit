@@ -79,4 +79,7 @@
     <string name="date_of_meal">Date of Meal:</string>
     <string name="mm_dd_yyyy">MM/DD/YYYY</string>
     <string name="step_counter">Step Counter</string>
+    <string name="goalName">Name:</string>
+    <string name="nameofgoal">Enter Name of Goal</string>
+    <string name="dateofgoal">Date of Goal</string>
 </resources>

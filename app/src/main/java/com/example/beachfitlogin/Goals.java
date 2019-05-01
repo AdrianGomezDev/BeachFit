@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,10 +67,14 @@ public class Goals extends Fragment{
         View view = inflater.inflate(R.layout.fragment_goals, container, false);
 
         newGoal = view.findViewById(R.id.fab);
+
+        final GoalModel goalModel = new GoalModel("Do 10 sets of Leg Lifts.");
+
         newGoal.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getActivity(),"Testing FAB G!",Toast.LENGTH_LONG).show();
+                DialogFragment dialogFragment = AddGoalLog.newInstance(goalModel);
+                dialogFragment.show(getChildFragmentManager(), "Goal Log");
             }
         });
 

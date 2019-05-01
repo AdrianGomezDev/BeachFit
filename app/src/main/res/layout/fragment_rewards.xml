@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#e2b43d"/>
+        android:background="@color/colorAccent"/>
 
     <TextView
         android:layout_width="match_parent"
