@@ -1,4 +1,4 @@
-package com.example.beachfitlogin;
+package com.example.beachfitlogin.Models;
 
 import java.util.ArrayList;
 import java.util.Arrays;

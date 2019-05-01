@@ -15,16 +15,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.beachfitlogin.Models.FoodModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +34,13 @@ import java.util.Objects;
 
 public class AddFoodLog extends DialogFragment {
     private static final String FOOD_MODEL_KEY = "FoodModel";
+
+    private FoodModel foodModel;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private EditText servingsInput;
+    private TextView dateInput;
+    private Calendar myCalendar;
 
     public static AddFoodLog newInstance(FoodModel food) {
         AddFoodLog dialogFragment = new AddFoodLog();
@@ -46,29 +53,27 @@ public class AddFoodLog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        @SuppressLint("InflateParams") View layout = inflater.inflate(R.layout.dialog_fragment_add_food_log, null);
+        @SuppressLint("InflateParams") View layout = inflater.inflate(R.layout.dialog_add_food_log, null);
 
-        final FoodModel foodModel = (FoodModel) Objects.requireNonNull(getArguments()).getSerializable(FOOD_MODEL_KEY);
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final EditText servingsInput = layout.findViewById(R.id.servingSizeEditText);
+        foodModel = (FoodModel) Objects.requireNonNull(getArguments()).getSerializable(FOOD_MODEL_KEY);
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        servingsInput = layout.findViewById(R.id.servingSizeEditText);
 
         // Get date of the meal from user, default is the current date.
-        final TextView dateInput = layout.findViewById(R.id.dateOfMealEditText);
-        final Calendar myCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        dateInput = layout.findViewById(R.id.dateOfMealEditText);
 
+        myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "MMM dd, yyyy"; //In which you need put here
+                String myFormat = "MMM dd, yyyy";
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
                 dateInput.setText(sdf.format(myCalendar.getTime()));
             }
@@ -87,45 +92,72 @@ public class AddFoodLog extends DialogFragment {
         builder.setTitle("When and how much did you eat?")
                 .setPositiveButton("Add to Log", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        Map<String, Object> date = new HashMap<>();
+                        date.put("date", dateInput.getText().toString());
 
-                        Map<String, Object> foodDoc = new HashMap<>();
-                        Map<String, Object> nestedFoodData = new HashMap<>();
-
-                        nestedFoodData.put("serving quantity", Objects.requireNonNull(foodModel).getServingQuantity());
-                        nestedFoodData.put("serving unit", foodModel.getServingUnit());
-                        nestedFoodData.put("serving weight", foodModel.getServingWeight());
-                        nestedFoodData.put("calories", foodModel.getCalories());
-                        nestedFoodData.put("total fat", foodModel.getTotalFat());
-                        nestedFoodData.put("saturated fat", foodModel.getSaturatedFat());
-                        nestedFoodData.put("cholesterol", foodModel.getCholesterol());
-                        nestedFoodData.put("sodium", foodModel.getSodium());
-                        nestedFoodData.put("total carbohydrates", foodModel.getTotalCarbohydrates());
-                        nestedFoodData.put("dietary fiber", foodModel.getDietaryFiber());
-                        nestedFoodData.put("sugars", foodModel.getSugars());
-                        nestedFoodData.put("protein", foodModel.getProtein());
-
-                        Double servingsConsumed = Double.parseDouble(servingsInput.getText().toString());
-                        nestedFoodData.put("servings consumed", servingsConsumed);
-
-                        Double totalCalsConsumed = servingsConsumed * foodModel.getCalories();
-                        nestedFoodData.put("total calories consumed", totalCalsConsumed);
-
-                        foodDoc.put(Objects.requireNonNull(foodModel).getFoodName(), nestedFoodData);
-
-                        // Update FireStore database
-                        db.collection("users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
-                                .collection("Diet Logs").document(dateInput.getText().toString())
-                                .set(foodDoc, SetOptions.merge())
+                        // Update FireStore Diet Log collection with date of consumption
+                        db.collection("users")
+                                .document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                                .collection("Diet Logs")
+                                .document(dateInput.getText().toString())
+                                .set(date, SetOptions.merge())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d("FIRESTORE", "DocumentSnapshot successfully written!");
+                                        Log.d("FireStore", "DocumentSnapshot successfully written!");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.w("FIRESTORE", "Error writing document", e);
+                                        Log.w("FireStore", "Error writing document", e);
+                                    }
+                                });
+
+                        Map<String, Object> foodLog = new HashMap<>();
+                        Map<String, Object> foodDoc = new HashMap<>();
+                        Map<String, Object> nestedFoodData = new HashMap<>();
+
+                        nestedFoodData.put("foodName", Objects.requireNonNull(foodModel).getFoodName());
+                        nestedFoodData.put("photoThumb", foodModel.getPhotoThumb().toString());
+                        nestedFoodData.put("servingQuantity", Objects.requireNonNull(foodModel).getServingQuantity());
+                        nestedFoodData.put("servingUnit", foodModel.getServingUnit());
+                        nestedFoodData.put("servingWeight", foodModel.getServingWeight());
+                        nestedFoodData.put("calories", foodModel.getCalories());
+                        nestedFoodData.put("totalFat", foodModel.getTotalFat());
+                        nestedFoodData.put("saturatedFat", foodModel.getSaturatedFat());
+                        nestedFoodData.put("cholesterol", foodModel.getCholesterol());
+                        nestedFoodData.put("sodium", foodModel.getSodium());
+                        nestedFoodData.put("totalCarbs", foodModel.getTotalCarbs());
+                        nestedFoodData.put("dietaryFiber", foodModel.getDietaryFiber());
+                        nestedFoodData.put("sugars", foodModel.getSugars());
+                        nestedFoodData.put("protein", foodModel.getProtein());
+
+                        Double servingsConsumed = Double.parseDouble(servingsInput.getText().toString());
+                        nestedFoodData.put("servingsConsumed", servingsConsumed);
+
+                        Double totalCalsConsumed = servingsConsumed * foodModel.getCalories();
+                        nestedFoodData.put("totalCalsConsumed", totalCalsConsumed);
+
+                        foodDoc.put(foodModel.getFoodName(), nestedFoodData);
+                        foodLog.put("foodLog", foodDoc);
+
+                        // Update FireStore foodLog collection for that specific date
+                        db.collection("users")
+                                .document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                                .collection("Diet Logs")
+                                .document(dateInput.getText().toString())
+                                .set(foodLog, SetOptions.merge())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("FireStore", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("FireStore", "Error writing document", e);
                                     }
                                 });
                     }

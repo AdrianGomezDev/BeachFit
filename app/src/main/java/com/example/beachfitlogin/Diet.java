@@ -27,6 +27,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.beachfitlogin.Adapters.FoodAdapter;
+import com.example.beachfitlogin.Models.DailyDietLogModel;
+import com.example.beachfitlogin.Models.FoodModel;
+import com.example.beachfitlogin.ViewHolders.DailyDietLogViewHolder;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -40,6 +53,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,38 +68,23 @@ public class Diet extends Fragment {
     private static final String NUTRITIONIX_API_KEY = "ed2c50519010c1b21a2207e7559890e1";
 
     private EditText searchBarView;
+    private ImageButton searchButton;
     private ProgressBar progressBar;
     private NestedScrollView suggestionsScrollView;
     private RecyclerView suggestionsRecycler;
-
+    private RecyclerView dietLogRecycler;
     private ConstraintLayout nutrientsView;
     private TextView nutrientsText;
     private TextView nutrientsTitleText;
     private ImageView nutrientsImage;
     private Button addToFoodLog;
+    private FirestoreRecyclerAdapter adapter;
 
-    private OnFragmentInteractionListener mListener;
+    public Diet() { /* Required empty public constructor */ }
 
-    public Diet() {
-        // Required empty public constructor
-    }
-
-    public static Diet newInstance() {
-        return new Diet();
-    }
+    public static Diet newInstance() { return new Diet(); }
 
     //*********************************** Lifecycle Methods **************************************//
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,12 +95,33 @@ public class Diet extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Objects.requireNonNull(getActivity()).setTitle("Diet");
-
         View layout = inflater.inflate(R.layout.fragment_diet, container, false);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
 
-        // Foods search bar related views
         searchBarView = layout.findViewById(R.id.foodSearchBar);
+        searchButton = layout.findViewById(R.id.foodSearchButton);
+        progressBar = layout.findViewById(R.id.searchProgressBar);
+        suggestionsScrollView = layout.findViewById(R.id.suggestionsScroll);
+        suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
+        nutrientsView = layout.findViewById(R.id.nutrientsLayout);
+        nutrientsText = layout.findViewById(R.id.nutrientInfoView);
+        nutrientsTitleText = layout.findViewById(R.id.foodTitleView);
+        nutrientsImage = layout.findViewById(R.id.foodImageNutrientView);
+        addToFoodLog = layout.findViewById(R.id.addToMyFoodLogButton);
+
+        // suggestionsRecycler displays the search results for the food that the user entered
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestionsRecycler.getContext(),
+                new LinearLayoutManager(getActivity()).getOrientation());
+        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
+        suggestionsRecycler.setHasFixedSize(true);
+        suggestionsRecycler.addItemDecoration(dividerItemDecoration);
+        suggestionsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // dietLogRecycler displays the daily food logs that are currently in the database
+        dietLogRecycler = layout.findViewById(R.id.dietLogRecyclerView);
+        dietLogRecycler.addItemDecoration(dividerItemDecoration);
+        dietLogRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // Updates search results every time user enters a letter
         searchBarView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -116,46 +136,74 @@ public class Diet extends Fragment {
                 //new RetrieveSearchSuggestionsTask().execute();
             }
         });
-        ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
+
+        // Fetch search results upon click of the search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                dietLogRecycler.setVisibility(View.GONE);
                 new RetrieveSearchSuggestionsTask().execute();
             }
         });
-        progressBar = layout.findViewById(R.id.searchProgressBar);
-        suggestionsScrollView = layout.findViewById(R.id.suggestionsScroll);
-        suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
-        suggestionsRecycler.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestionsRecycler.getContext(), layoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
-        suggestionsRecycler.addItemDecoration(dividerItemDecoration);
-        suggestionsRecycler.setLayoutManager(layoutManager);
 
-        // Nutrient related views
-        addToFoodLog = layout.findViewById(R.id.addToMyFoodLogButton);
-        nutrientsView = layout.findViewById(R.id.nutrientsLayout);
-        nutrientsText = layout.findViewById(R.id.nutrientInfoView);
-        nutrientsTitleText = layout.findViewById(R.id.foodTitleView);
-        nutrientsImage = layout.findViewById(R.id.foodImageNutrientView);
+        //Fetch dates from FireStore
+        Query query = FirebaseFirestore.getInstance().collection("users")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .collection("Diet Logs")
+                .orderBy("date", Query.Direction.DESCENDING);
 
-        return layout; // Inflate the layout for this fragment
+        FirestoreRecyclerOptions<DailyDietLogModel> options = new FirestoreRecyclerOptions.Builder<DailyDietLogModel>()
+                .setQuery(query, DailyDietLogModel.class)
+                .build();
+
+        adapter = new FirestoreRecyclerAdapter<DailyDietLogModel, DailyDietLogViewHolder>(options) {
+
+            @Override
+            public void onBindViewHolder(@NonNull DailyDietLogViewHolder holder, int position, @NonNull DailyDietLogModel dailyDietLogModel) {
+                holder.setDate(dailyDietLogModel.getDate());
+                holder.setFoodLog(dailyDietLogModel.getFoodLog());
+            }
+
+            @NonNull
+            @Override
+            public DailyDietLogViewHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
+                View view = LayoutInflater.from(group.getContext())
+                        .inflate(R.layout.item_diet_log, group, false);
+
+                return new DailyDietLogViewHolder(view);
+            }
+        };
+        dietLogRecycler.setAdapter(adapter);
+
+        return layout;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     //**************************************** API Calls *****************************************//
 
     private class RetrieveNutritionInfoTask extends AsyncTask<Object, Void, String> {
-
-        private String foodName;
-        private Uri foodImage;
-
         protected  void onPreExecute() {
             suggestionsScrollView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
@@ -163,8 +211,6 @@ public class Diet extends Fragment {
 
         @Override
         protected String doInBackground(Object... params) {
-            foodName = (String) params[0];
-            foodImage = Uri.parse((String)params[1]);
             try {
                 URL url = new URL(NUTRITION_INFO_URL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -196,25 +242,27 @@ public class Diet extends Fragment {
             progressBar.setVisibility(View.GONE);
             nutrientsView.setVisibility(View.VISIBLE);
 
+            // Load hi-res image if one exists, otherwise load the thumbnail
             try {
+
                 JSONObject jo = new JSONObject(response).getJSONArray("foods").getJSONObject(0);
                 Uri foodImage = Uri.parse(jo.getJSONObject("photo").getString("highres"));
+                final FoodModel foodModel = jsonToFoodModel(jo);
+
                 if(foodImage.equals(Uri.parse("null"))){
                     foodImage = Uri.parse(jo.getJSONObject("photo").getString("thumb"));
                 }
+
                 Picasso.get().load(foodImage).into(nutrientsImage);
-
-                final FoodModel foodModel = jsonToFoodModel(jo);
-
                 nutrientsTitleText.setText(capitalizeString(foodModel.getFoodName()));
                 nutrientsText.setText(foodModel.toString());
 
                 addToFoodLog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //TODO: Open dialog, get servings and date of eating and write to FireStore for that user
                         DialogFragment dialogFragment = AddFoodLog.newInstance(foodModel);
                         dialogFragment.show(getChildFragmentManager(), "Food Log");
+                        searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
                     }
                 });
             } catch (JSONException e) {
@@ -317,19 +365,27 @@ public class Diet extends Fragment {
         return new FoodModel(
                 capitalizeString(jo.getString("food_name")),
                 Uri.parse(jo.getJSONObject("photo").getString("thumb")),
-                Double.parseDouble(jo.getString("serving_qty")),
+                myDoubleParser(jo.getString("serving_qty")),
                 jo.getString("serving_unit"),
-                Double.parseDouble(jo.getString("serving_weight_grams")),
-                Double.parseDouble(jo.getString("nf_calories")),
-                Double.parseDouble(jo.getString("nf_total_fat")),
-                Double.parseDouble(jo.getString("nf_saturated_fat")),
-                Double.parseDouble(jo.getString("nf_cholesterol")),
-                Double.parseDouble(jo.getString("nf_sodium")),
-                Double.parseDouble(jo.getString("nf_total_carbohydrate")),
-                Double.parseDouble(jo.getString("nf_dietary_fiber")),
-                Double.parseDouble(jo.getString("nf_sugars")),
-                Double.parseDouble(jo.getString("nf_protein"))
+                myDoubleParser(jo.getString("serving_weight_grams")),
+                myDoubleParser(jo.getString("nf_calories")),
+                myDoubleParser(jo.getString("nf_total_fat")),
+                myDoubleParser(jo.getString("nf_saturated_fat")),
+                myDoubleParser(jo.getString("nf_cholesterol")),
+                myDoubleParser(jo.getString("nf_sodium")),
+                myDoubleParser(jo.getString("nf_total_carbohydrate")),
+                myDoubleParser(jo.getString("nf_dietary_fiber")),
+                myDoubleParser(jo.getString("nf_sugars")),
+                myDoubleParser(jo.getString("nf_protein"))
         );
+    }
+
+    // Replaces null strings with 0.0
+    private Double myDoubleParser(String str){
+        if(str.equals("null")){
+            return 0.0;
+        }
+        return Double.parseDouble(str);
     }
 
     // Reads the response from the api call from a buffer and returns response as a string

@@ -7,6 +7,8 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:gravity="center">
+
+    <!--Search Bar consists of these views-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,10 +36,14 @@
             android:scaleType="fitCenter"
             android:src="@drawable/round_search_black_24" />
     </LinearLayout>
+
+    <!--Daily diet logs and search suggestions displayed here-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
+
+        <!--Progress bar displayed when loading suggestions and retrieving nutrients-->
         <ProgressBar
             android:id="@+id/searchProgressBar"
             android:layout_width="wrap_content"
@@ -45,6 +51,8 @@
             android:indeterminate="true"
             android:layout_centerHorizontal="true"
             android:visibility="gone" />
+
+        <!--Search suggestions displayed in this RecyclerView-->
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/suggestionsScroll"
             android:layout_width="match_parent"
@@ -54,13 +62,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.v4.widget.NestedScrollView>
+
+        <!--Diet logs displayed in this RecyclerView-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/dietLogRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"/>
+
+        <!--Nutrients Views that are displayed when user clicks a food from the search suggestions-->
         <android.support.constraint.ConstraintLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nutrientsLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-
             <TextView
                 android:id="@+id/foodTitleView"
                 android:layout_width="wrap_content"
@@ -75,18 +91,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread_inside" />
-
             <TextView
                 android:id="@+id/nutrientInfoView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nutrient_information"
+                android:fontFamily="monospace"
                 app:layout_constraintBottom_toTopOf="@+id/addToMyFoodLogButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/foodImageNutrientView"
                 app:layout_constraintTop_toBottomOf="@+id/foodTitleView" />
-
             <ImageView
                 android:id="@+id/foodImageNutrientView"
                 android:layout_width="171dp"
@@ -99,7 +114,6 @@
                 app:layout_constraintTop_toTopOf="@+id/nutrientInfoView"
                 app:layout_constraintVertical_bias="0.49"
                 android:src="@drawable/beachfitlogo"/>
-
             <Button
                 android:id="@+id/addToMyFoodLogButton"
                 style="@style/Widget.AppCompat.Button.Colored"
@@ -115,7 +129,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nutrientInfoView" />
-
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
 </LinearLayout>

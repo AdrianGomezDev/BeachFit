@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
+import com.example.beachfitlogin.Models.ExerciseModel;
+import com.example.beachfitlogin.ViewHolders.ExerciseViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +30,7 @@ public class Fitness extends Fragment{
 
     private OnFragmentInteractionListener mListener;
 
-    private FirestoreRecyclerAdapter<ExerciseModel, ExerciseIndexHolder> adapter;
+    private FirestoreRecyclerAdapter<ExerciseModel, ExerciseViewHolder> adapter;
 
     public Fitness() {
         // Required empty public constructor
@@ -80,10 +83,10 @@ public class Fitness extends Fragment{
                 .setQuery(query, ExerciseModel.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<ExerciseModel, ExerciseIndexHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<ExerciseModel, ExerciseViewHolder>(options) {
 
             @Override
-            public void onBindViewHolder(@NonNull ExerciseIndexHolder holder, int position, @NonNull ExerciseModel exerciseModel) {
+            public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position, @NonNull ExerciseModel exerciseModel) {
                 final String exerciseName = exerciseModel.getName();
                 holder.setExerciseName(exerciseName);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -96,11 +99,11 @@ public class Fitness extends Fragment{
 
             @NonNull
             @Override
-            public ExerciseIndexHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
+            public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
                 View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.exercise_index, group, false);
+                        .inflate(R.layout.item_exercise, group, false);
 
-                return new ExerciseIndexHolder(view);
+                return new ExerciseViewHolder(view);
             }
         };
         recyclerView.setAdapter(adapter);
