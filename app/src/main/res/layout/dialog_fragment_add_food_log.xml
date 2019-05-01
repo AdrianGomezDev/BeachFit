@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddFoodLog">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/servingSizeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/servings_consumed"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/servingSizeEditText"
+            app:layout_constraintEnd_toStartOf="@+id/servingSizeEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/servingSizeEditText" />
+
+        <EditText
+            android:id="@+id/servingSizeEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_servings"
+            android:textSize="14sp"
+            android:inputType="numberDecimal"
+            android:longClickable="false"
+            app:layout_constraintBottom_toTopOf="@+id/dateOfMealEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/servingSizeLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/dateOfMealLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_of_meal"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/dateOfMealEditText"
+            app:layout_constraintEnd_toEndOf="@+id/servingSizeLabel"
+            app:layout_constraintTop_toTopOf="@+id/dateOfMealEditText" />
+
+        <TextView
+            android:id="@+id/dateOfMealEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/mm_dd_yyyy"
+            android:textSize="14sp"
+            android:longClickable="false"
+            android:background="?attr/editTextBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/servingSizeEditText"
+            app:layout_constraintTop_toBottomOf="@+id/servingSizeEditText" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

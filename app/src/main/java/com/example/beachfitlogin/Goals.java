@@ -3,10 +3,13 @@ package com.example.beachfitlogin;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class Goals extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -17,6 +20,10 @@ public class Goals extends Fragment{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FloatingActionButton newGoal;
+
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,7 +63,17 @@ public class Goals extends Fragment{
                              Bundle savedInstanceState) {
         getActivity().setTitle("Goals");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_goals, container, false);
+        View view = inflater.inflate(R.layout.fragment_goals, container, false);
+
+        newGoal = view.findViewById(R.id.fab);
+        newGoal.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(getActivity(),"Testing FAB G!",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

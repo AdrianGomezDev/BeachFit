@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnFragmentInteractionListener{
@@ -66,6 +68,8 @@ public class NavigationActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, home);
         ft.commit();
+        // Highlights the Home item in the nav drawer
+        navigationView.setCheckedItem(R.id.nav_home);
     }
 
     @Override
@@ -136,13 +140,17 @@ public class NavigationActivity extends AppCompatActivity
             case R.id.nav_analytics:
                 newFragment = new Analytics();
                 break;
+            case R.id.nav_step_counter:
+                newFragment = new StepCounter();
+                break;
             case R.id.nav_share:
                 newFragment = new Share();
                 break;
         }
 
-        // Replace the current fragment with the selected fragment
-        if (newFragment != null) {
+        // Replace the current fragment with the selected fragment if it is different fragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (newFragment != null && !Objects.requireNonNull(currentFragment).getClass().equals(newFragment.getClass())) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment_container, newFragment);
             ft.addToBackStack(null);

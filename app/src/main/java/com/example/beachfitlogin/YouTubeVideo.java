@@ -67,7 +67,7 @@ public class YouTubeVideo extends YouTubePlayerSupportFragment {
             });
         }
     }
-
+////////////////////////////////////////////
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -78,7 +78,7 @@ public class YouTubeVideo extends YouTubePlayerSupportFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+////////////////////////////////////////////
     @Override
     public void onDetach() {
         super.onDetach();
