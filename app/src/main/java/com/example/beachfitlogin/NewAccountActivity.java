@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
+import static com.example.beachfitlogin.Util.isEmpty;
+
 public class NewAccountActivity extends AppCompatActivity {
 
     private static String TAG= "CreateAccount";
@@ -142,10 +144,5 @@ public class NewAccountActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    // Checks if EditText is empty
-    private boolean isEmpty(EditText eText){
-        return eText.getText().toString().trim().length() <= 0;
     }
 }
