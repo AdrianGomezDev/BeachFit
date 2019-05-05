@@ -2,27 +2,31 @@ package com.example.beachfitlogin.Models;
 
 import android.net.Uri;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class DailyDietLogModel {
 
-    private String date;
+    private Date date;
     private Map<String, Map<String, Object>> foodLog;
 
     public DailyDietLogModel() { }
 
-    public DailyDietLogModel(String date, Map<String, Map<String, Object>> foodLog) {
+    public DailyDietLogModel(Date date, Map<String, Map<String, Object>> foodLog) {
         this.date = date;
         this.foodLog = foodLog;
     }
 
     public String getDate() {
-        return date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+        return dateFormat.format(date);
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

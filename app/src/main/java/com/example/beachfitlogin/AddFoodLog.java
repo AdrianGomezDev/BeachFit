@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.example.beachfitlogin.Util.isEmpty;
+import static com.example.beachfitlogin.Util.setTimeToZero;
 
 public class AddFoodLog extends DialogFragment {
     private static final String FOOD_MODEL_KEY = "FoodModel";
@@ -43,6 +44,7 @@ public class AddFoodLog extends DialogFragment {
     private EditText servingsInput;
     private TextView dateInput;
     private Calendar myCalendar;
+    private Date timestamp;
 
     public static AddFoodLog newInstance(FoodModel food) {
         AddFoodLog dialogFragment = new AddFoodLog();
@@ -68,18 +70,23 @@ public class AddFoodLog extends DialogFragment {
         dateInput = layout.findViewById(R.id.dateOfMealEditText);
 
         myCalendar = Calendar.getInstance();
+        myCalendar.setTime(new Date());
+        setTimeToZero(myCalendar);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setTimeToZero(myCalendar);
+                timestamp = new Date(myCalendar.getTimeInMillis());
                 String myFormat = "MMM dd, yyyy";
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
                 dateInput.setText(sdf.format(myCalendar.getTime()));
             }
         };
-        dateInput.setText(DateFormat.getDateInstance().format(new Date()));
+        timestamp = new Date(myCalendar.getTimeInMillis());
+        dateInput.setText(DateFormat.getDateInstance().format(timestamp));
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +116,7 @@ public class AddFoodLog extends DialogFragment {
                         }
                         else{
                             Map<String, Object> date = new HashMap<>();
-                            date.put("date", dateInput.getText().toString());
+                            date.put("date", timestamp);
 
                             // Update FireStore Diet Log collection with date of consumption
                             db.collection("users")

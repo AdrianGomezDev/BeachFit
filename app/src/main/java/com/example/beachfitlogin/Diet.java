@@ -1,5 +1,6 @@
 package com.example.beachfitlogin;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,33 +14,29 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.beachfitlogin.Adapters.DailyDietLogAdapter;
 import com.example.beachfitlogin.Adapters.FoodAdapter;
 import com.example.beachfitlogin.Models.DailyDietLogModel;
 import com.example.beachfitlogin.Models.FoodModel;
-import com.example.beachfitlogin.ViewHolders.DailyDietLogViewHolder;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -53,12 +50,15 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Diet extends Fragment {
+import static com.example.beachfitlogin.Util.capitalizeString;
+import static com.example.beachfitlogin.Util.hideKeyboardFrom;
+import static com.example.beachfitlogin.Util.myDoubleParser;
+
+public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLogClickListener{
 
     private static final String INSTANT_SEARCH_URL = "https://trackapi.nutritionix.com/v2/search/instant?";
     private static final String NUTRITION_INFO_URL = "https://trackapi.nutritionix.com/v2/natural/nutrients";
@@ -68,17 +68,17 @@ public class Diet extends Fragment {
     private static final String NUTRITIONIX_API_KEY = "ed2c50519010c1b21a2207e7559890e1";
 
     private EditText searchBarView;
-    private ImageButton searchButton;
     private ProgressBar progressBar;
     private NestedScrollView suggestionsScrollView;
     private RecyclerView suggestionsRecycler;
-    private RecyclerView dietLogRecycler;
-    private ConstraintLayout nutrientsView;
+    private NestedScrollView nutrientsScrollView;
+    private LinearLayout nutrientsView;
     private TextView nutrientsText;
     private TextView nutrientsTitleText;
     private ImageView nutrientsImage;
     private Button addToFoodLog;
-    private FirestoreRecyclerAdapter adapter;
+    private Button backToDietLog;
+    private DailyDietLogAdapter dailyDietLogAdapter;
 
     public Diet() { /* Required empty public constructor */ }
 
@@ -94,87 +94,98 @@ public class Diet extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Objects.requireNonNull(getActivity()).setTitle("Diet");
-        View layout = inflater.inflate(R.layout.fragment_diet, container, false);
+        Objects.requireNonNull(getActivity()).setTitle("Diet"); // Set fragment title
+        View layout = inflater.inflate(R.layout.fragment_diet, container, false); // Inflate main layout
+
+        // Custom divider decoration for recyclerViews
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
+                new LinearLayoutManager(getActivity()).getOrientation());
+        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
 
         searchBarView = layout.findViewById(R.id.foodSearchBar);
-        searchButton = layout.findViewById(R.id.foodSearchButton);
+        ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
         progressBar = layout.findViewById(R.id.searchProgressBar);
+        FrameLayout recyclerFrame = layout.findViewById(R.id.recyclerFrame);
         suggestionsScrollView = layout.findViewById(R.id.suggestionsScroll);
         suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
+        nutrientsScrollView = layout.findViewById(R.id.nutrientsScrollView);
         nutrientsView = layout.findViewById(R.id.nutrientsLayout);
         nutrientsText = layout.findViewById(R.id.nutrientInfoView);
         nutrientsTitleText = layout.findViewById(R.id.foodTitleView);
         nutrientsImage = layout.findViewById(R.id.foodImageNutrientView);
         addToFoodLog = layout.findViewById(R.id.addToMyFoodLogButton);
+        backToDietLog = layout.findViewById(R.id.backToDietLogsButton);
+
+        // Hide suggestions if user clicks outside of suggestions scroll view
+        recyclerFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nutrientsScrollView.setVisibility(View.GONE);
+                suggestionsScrollView.setVisibility(View.GONE);
+            }
+        });
 
         // suggestionsRecycler displays the search results for the food that the user entered
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestionsRecycler.getContext(),
-                new LinearLayoutManager(getActivity()).getOrientation());
-        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
         suggestionsRecycler.setHasFixedSize(true);
         suggestionsRecycler.addItemDecoration(dividerItemDecoration);
         suggestionsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // dietLogRecycler displays the daily food logs that are currently in the database
-        dietLogRecycler = layout.findViewById(R.id.dietLogRecyclerView);
+        RecyclerView dietLogRecycler = layout.findViewById(R.id.dietLogRecyclerView);
         dietLogRecycler.addItemDecoration(dividerItemDecoration);
         dietLogRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // Updates search results every time user enters a letter
-        searchBarView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //TODO: Uncomment to update search suggestions after every letter inputted from user.
-                //TODO: This will waste a lot of api calls. We only get 1000 calls on the free Nutritionix developer plan.
-                //new RetrieveSearchSuggestionsTask().execute();
-            }
-        });
+        // TODO: Updates search results every time user enters a letter
+        // TODO: Uncomment to enable
+//        searchBarView.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                new RetrieveSearchSuggestionsTask().execute();
+//            }
+//        });
 
         // Fetch search results upon click of the search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                dietLogRecycler.setVisibility(View.GONE);
+                hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
                 new RetrieveSearchSuggestionsTask().execute();
             }
         });
 
-        //Fetch dates from FireStore
+        // User may also fetch search results by pressing the done button in soft keyboard
+        searchBarView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
+                    new RetrieveSearchSuggestionsTask().execute();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // Prepare query to fetch diet logs
         Query query = FirebaseFirestore.getInstance().collection("users")
                 .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
                 .collection("Diet Logs")
                 .orderBy("date", Query.Direction.DESCENDING);
 
+        // Use the query above to prepare the options for FireStore adapter
         FirestoreRecyclerOptions<DailyDietLogModel> options = new FirestoreRecyclerOptions.Builder<DailyDietLogModel>()
                 .setQuery(query, DailyDietLogModel.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<DailyDietLogModel, DailyDietLogViewHolder>(options) {
+        dailyDietLogAdapter = new DailyDietLogAdapter(options, this);
 
-            @Override
-            public void onBindViewHolder(@NonNull DailyDietLogViewHolder holder, int position, @NonNull DailyDietLogModel dailyDietLogModel) {
-                holder.setDate(dailyDietLogModel.getDate());
-                holder.setFoodLog(dailyDietLogModel.getFoodLog());
-            }
-
-            @NonNull
-            @Override
-            public DailyDietLogViewHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
-                View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.item_diet_log, group, false);
-
-                return new DailyDietLogViewHolder(view);
-            }
-        };
-        dietLogRecycler.setAdapter(adapter);
+        dietLogRecycler.setAdapter(dailyDietLogAdapter);
 
         return layout;
     }
@@ -192,17 +203,25 @@ public class Diet extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        dailyDietLogAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        dailyDietLogAdapter.stopListening();
+    }
+
+    @Override
+    public void onDailyDietLogClick(int position) {
+        // Hide suggestions if user clicks outside of suggestions scroll view
+        suggestionsScrollView.setVisibility(View.GONE);
+        nutrientsScrollView.setVisibility(View.GONE);
     }
 
     //**************************************** API Calls *****************************************//
 
+    @SuppressLint("StaticFieldLeak")
     private class RetrieveNutritionInfoTask extends AsyncTask<Object, Void, String> {
         protected  void onPreExecute() {
             suggestionsScrollView.setVisibility(View.GONE);
@@ -262,7 +281,13 @@ public class Diet extends Fragment {
                     public void onClick(View view) {
                         DialogFragment dialogFragment = AddFoodLog.newInstance(foodModel);
                         dialogFragment.show(getChildFragmentManager(), "Food Log");
-                        searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    }
+                });
+
+                backToDietLog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        nutrientsScrollView.setVisibility(View.GONE);
                     }
                 });
             } catch (JSONException e) {
@@ -272,6 +297,7 @@ public class Diet extends Fragment {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class RetrieveSearchSuggestionsTask extends AsyncTask<Void, Void, String> implements FoodAdapter.OnFoodClickListener {
 
         private String query;
@@ -316,14 +342,14 @@ public class Diet extends Fragment {
 
             try {
                 foodList.clear();
-                List<String> tagNameList = new ArrayList<>();
+                List<String> tagIdList = new ArrayList<>();
                 JSONArray array = new JSONObject(response).getJSONArray("common");
                 for(int i = 0; i < array.length(); i++){
                     JSONObject jo = array.getJSONObject(i);
-                    if(!tagNameList.contains(jo.getString("tag_name"))){
-                        tagNameList.add(jo.getString("tag_name"));
+                    if(!tagIdList.contains(jo.getString("tag_id"))){
+                        tagIdList.add(jo.getString("tag_id"));
                         FoodModel foodModel = new FoodModel(
-                                capitalizeString(jo.getString("tag_name")),
+                                capitalizeString(jo.getString("food_name")),
                                 Uri.parse(jo.getJSONObject("photo").getString("thumb"))
                         );
                         foodList.add(foodModel);
@@ -340,6 +366,8 @@ public class Diet extends Fragment {
         @Override
         public void onFoodClick(int position) {
             searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            suggestionsScrollView.setVisibility(View.GONE);
+            nutrientsScrollView.setVisibility(View.VISIBLE);
             String foodName = foodList.get(position).getFoodName();
             String foodImage = foodList.get(position).getPhotoThumb().toString();
             new RetrieveNutritionInfoTask().execute(foodName, foodImage);
@@ -347,18 +375,6 @@ public class Diet extends Fragment {
     }
 
     //************************************** Helper Methods **************************************//
-
-    // Capitalize first letters of all words in a string
-    private String capitalizeString(String str){
-        String words[]=str.split("\\s");
-        StringBuilder capitalizedString= new StringBuilder();
-        for(String w:words){
-            String first = w.substring(0,1);
-            String afterFirst = w.substring(1);
-            capitalizedString.append(first.toUpperCase()).append(afterFirst).append(" ");
-        }
-        return capitalizedString.toString().trim();
-    }
 
     // Creates a food model from Nutritionix /natural/nutrients endpoint API response
     private FoodModel jsonToFoodModel(JSONObject jo) throws JSONException{
@@ -378,14 +394,6 @@ public class Diet extends Fragment {
                 myDoubleParser(jo.getString("nf_sugars")),
                 myDoubleParser(jo.getString("nf_protein"))
         );
-    }
-
-    // Replaces null strings with 0.0
-    private Double myDoubleParser(String str){
-        if(str.equals("null")){
-            return 0.0;
-        }
-        return Double.parseDouble(str);
     }
 
     // Reads the response from the api call from a buffer and returns response as a string

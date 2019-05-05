@@ -80,4 +80,5 @@
     <string name="mm_dd_yyyy">MM/DD/YYYY</string>
     <string name="step_counter">Step Counter</string>
     <string name="total_cals">total Cals</string>
+    <string name="back_to_diet_logs">Back to Diet Logs</string>
 </resources>
