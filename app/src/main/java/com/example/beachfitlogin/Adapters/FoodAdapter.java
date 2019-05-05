@@ -1,4 +1,4 @@
-package com.example.beachfitlogin;
+package com.example.beachfitlogin.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.beachfitlogin.Models.FoodModel;
+import com.example.beachfitlogin.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     private OnFoodClickListener mOnFoodClickListener;
     private List<FoodModel> mFoods;
 
-    FoodAdapter(List<FoodModel> foods, OnFoodClickListener onFoodClickListener) {
+    public FoodAdapter(List<FoodModel> foods, OnFoodClickListener onFoodClickListener) {
         this.mFoods = foods;
         this.mOnFoodClickListener = onFoodClickListener;
     }
@@ -29,7 +31,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View contactView = inflater.inflate(R.layout.food_item, parent, false);
+        View contactView = inflater.inflate(R.layout.item_searched_food, parent, false);
 
         return new ViewHolder(contactView, mOnFoodClickListener);
     }

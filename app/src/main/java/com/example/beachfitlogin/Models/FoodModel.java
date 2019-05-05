@@ -1,4 +1,4 @@
-package com.example.beachfitlogin;
+package com.example.beachfitlogin.Models;
 
 import android.net.Uri;
 
@@ -17,10 +17,14 @@ public class FoodModel implements Serializable {
     private Double saturatedFat;
     private Double cholesterol;
     private Double sodium;
-    private Double totalCarbohydrates;
+    private Double totalCarbs;
     private Double dietaryFiber;
     private Double sugars;
     private Double protein;
+
+    // User consumption statistics
+    private Double servingsConsumed;
+    private Double totalCalsConsumed;
 
     public FoodModel() {}
 
@@ -35,15 +39,17 @@ public class FoodModel implements Serializable {
         this.saturatedFat = null;
         this.cholesterol = null;
         this.sodium = null;
-        this.totalCarbohydrates = null;
+        this.totalCarbs = null;
         this.dietaryFiber = null;
         this.sugars = null;
         this.protein = null;
+        this.servingsConsumed = null;
+        this.totalCalsConsumed = null;
     }
 
     public FoodModel(String foodName, Uri photoThumb, Double servingQuantity, String servingUnit,
                      Double servingWeight, Double calories, Double totalFat, Double saturatedFat,
-                     Double cholesterol, Double sodium, Double totalCarbohydrates, Double dietaryFiber,
+                     Double cholesterol, Double sodium, Double totalCarbs, Double dietaryFiber,
                      Double sugars, Double protein) {
         this.foodName = foodName;
         this.photoThumb = photoThumb;
@@ -55,10 +61,34 @@ public class FoodModel implements Serializable {
         this.saturatedFat = saturatedFat;
         this.cholesterol = cholesterol;
         this.sodium = sodium;
-        this.totalCarbohydrates = totalCarbohydrates;
+        this.totalCarbs = totalCarbs;
         this.dietaryFiber = dietaryFiber;
         this.sugars = sugars;
         this.protein = protein;
+        this.servingsConsumed = null;
+        this.totalCalsConsumed = null;
+    }
+
+    public FoodModel(String foodName, Uri photoThumb, Double servingQuantity, String servingUnit,
+                     Double servingWeight, Double calories, Double totalFat, Double saturatedFat,
+                     Double cholesterol, Double sodium, Double totalCarbs, Double dietaryFiber,
+                     Double sugars, Double protein, Double servingsConsumed, Double totalCalsConsumed) {
+        this.foodName = foodName;
+        this.photoThumb = photoThumb;
+        this.servingQuantity = servingQuantity;
+        this.servingUnit = servingUnit;
+        this.servingWeight = servingWeight;
+        this.calories = calories;
+        this.totalFat = totalFat;
+        this.saturatedFat = saturatedFat;
+        this.cholesterol = cholesterol;
+        this.sodium = sodium;
+        this.totalCarbs = totalCarbs;
+        this.dietaryFiber = dietaryFiber;
+        this.sugars = sugars;
+        this.protein = protein;
+        this.servingsConsumed = servingsConsumed;
+        this.totalCalsConsumed = totalCalsConsumed;
     }
 
     public String getFoodName() {
@@ -109,9 +139,9 @@ public class FoodModel implements Serializable {
 
     public void setSodium(Double sodium) { this.sodium = sodium; }
 
-    public Double getTotalCarbohydrates() { return totalCarbohydrates; }
+    public Double getTotalCarbs() { return totalCarbs; }
 
-    public void setTotalCarbohydrates(Double totalCarbohydrates) { this.totalCarbohydrates = totalCarbohydrates; }
+    public void setTotalCarbs(Double totalCarbs) { this.totalCarbs = totalCarbs; }
 
     public Double getDietaryFiber() { return dietaryFiber; }
 
@@ -125,6 +155,18 @@ public class FoodModel implements Serializable {
 
     public void setProtein(Double protein) { this.protein = protein; }
 
+    public Double getServingsConsumed() { return servingsConsumed; }
+
+    public void setServingsConsumed(Double servingsConsumed) { this.servingsConsumed = servingsConsumed; }
+
+    public Double getTotalCalsConsumed() {
+        return totalCalsConsumed;
+    }
+
+    public void setTotalCalsConsumed(Double totalCalsConsumed) {
+        this.totalCalsConsumed = totalCalsConsumed;
+    }
+
     @Override
     public String toString() {
         return  "Serving Quantity: " + servingQuantity    +  "\n" +
@@ -135,7 +177,7 @@ public class FoodModel implements Serializable {
                 "   Saturated Fat: " + saturatedFat       + "g\n" +
                 "     Cholesterol: " + cholesterol        + "mg\n" +
                 "          Sodium: " + sodium             + "mg\n" +
-                "     Total Carbs: " + totalCarbohydrates + "g\n" +
+                "     Total Carbs: " + totalCarbs         + "g\n" +
                 "   Dietary Fiber: " + dietaryFiber       + "g\n" +
                 "          Sugars: " + sugars             + "g\n" +
                 "         Protein: " + protein            + "g\n";
