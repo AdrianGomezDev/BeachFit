@@ -2,14 +2,23 @@ package com.example.beachfitlogin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ProgressPhotos extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -18,6 +27,7 @@ public class ProgressPhotos extends Fragment{
     private static final String ARG_PARAM2 = "param2";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Button photoButton;
+    String currentPhotoPath;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -98,9 +108,30 @@ public class ProgressPhotos extends Fragment{
 
     private void dispatchTakePictureIntent(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Fragment frag = this;
-        frag.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) !=null) {
+            File picFile = null;
+            try {
+                picFile = createImageFile();
+            } catch (IOException ex) {
+                //Error!!
+            }
+            if (picFile != null) {
+                Uri photoUri = FileProvider.getUriForFile(this.getContext(), "com.example.android.fileprovider", picFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
 
+    private File createImageFile() throws IOException
+    {
+        String time = new SimpleDateFormat("MMddyyyy").format(new Date());
+        String imageName = "BF_peg" + time;
+        File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageName,".jpg", storageDirectory);
+        currentPhotoPath = image.getAbsolutePath();
+        Toast.makeText(getActivity(),"Image returned", Toast.LENGTH_LONG).show();
+        return image;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
