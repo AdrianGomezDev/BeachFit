@@ -69,7 +69,6 @@
     <string name="search_the_food_database">Search the Food Database</string>
     <string name="food_search_button">Food Search Button</string>
     <string name="thumbnail_photo_for_food_item">thumbnail photo for food item</string>
-    <string name="food_name">Food Name</string>
     <string name="nutrient_information">Nutrient Information</string>
     <string name="food_image">Food Image</string>
     <string name="add_to_my_food_log">Add to My Food Log</string>
@@ -81,4 +80,12 @@
     <string name="step_counter">Step Counter</string>
     <string name="total_cals">total Cals</string>
     <string name="back_to_diet_logs">Back to Diet Logs</string>
+    <string name="mmmm_dd_yyyy">MMMM DD, YYYY</string>
+    <string name="food">Food</string>
+    <string name="cals_serving">Cals/Serving</string>
+    <string name="eaten">Eaten</string>
+    <string name="total_calories">Total Calories</string>
+    <string name="_0">0</string>
+    <string name="food_name">Food Name</string>
+    <string name="total_calories_for_this_day">Total Calories for this Day:</string>
 </resources>

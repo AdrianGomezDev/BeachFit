@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/foodNameLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/foodColumnEntry"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:text="@string/food_name" />
+        android:text="@string/food_name"
+        android:textAlignment="textStart"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="@+id/calsServingColumnEntry"
+        app:layout_constraintEnd_toStartOf="@+id/calsServingColumnEntry"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calsServingColumnEntry" />
 
     <TextView
-        android:id="@+id/servingsConsumedLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/calsServingColumnEntry"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2.5"
-        android:text="@string/servings_consumed" />
+        android:text="@string/_0"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/servingsEatenColumnEntry"
+        app:layout_constraintEnd_toStartOf="@+id/servingsEatenColumnEntry"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/foodColumnEntry"
+        app:layout_constraintTop_toTopOf="@+id/servingsEatenColumnEntry" />
 
     <TextView
-        android:id="@+id/totalCaloriesLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/servingsEatenColumnEntry"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2.5"
-        android:text="@string/total_cals"
-        />
+        android:text="@string/_0"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/totalCalsColumnEntry"
+        app:layout_constraintEnd_toStartOf="@+id/totalCalsColumnEntry"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calsServingColumnEntry"
+        app:layout_constraintTop_toTopOf="@+id/totalCalsColumnEntry" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/totalCalsColumnEntry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/servingsEatenColumnEntry"
+        app:layout_constraintTop_toTopOf="parent" />
 
+</android.support.constraint.ConstraintLayout>

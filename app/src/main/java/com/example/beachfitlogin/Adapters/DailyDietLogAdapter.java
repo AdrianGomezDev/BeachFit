@@ -1,19 +1,27 @@
 package com.example.beachfitlogin.Adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.beachfitlogin.Models.DailyDietLogModel;
 import com.example.beachfitlogin.Models.FoodModel;
+import com.example.beachfitlogin.Models.LoggedFoodModel;
+import com.example.beachfitlogin.NavigationActivity;
 import com.example.beachfitlogin.R;
+import com.example.beachfitlogin.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogModel, DailyDietLogAdapter.ViewHolder> {
 
@@ -33,11 +41,19 @@ public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogMo
     @Override
     public void onBindViewHolder(@NonNull DailyDietLogAdapter.ViewHolder holder, int position, @NonNull DailyDietLogModel dailyDietLogModel) {
         TextView date = holder.date;
-        TextView foodLog = holder.foodLog;
+        ListView foodLog = holder.foodLogListView;
+        TextView totalCalsForDay = holder.totalCalsForDay;
+        Context context = holder.date.getContext();
+        List<LoggedFoodModel> loggedFoodList= holder.setFoodLogListViewAdapter(dailyDietLogModel.getFoodLog());
 
         date.setText(dailyDietLogModel.getDate());
-        foodLog.setText(holder.setFoodLog(dailyDietLogModel.getFoodLog()));
-
+        LoggedFoodAdapter adapter = new LoggedFoodAdapter(context, loggedFoodList);
+        Double totalCals = 0.0;
+        for(LoggedFoodModel model: loggedFoodList){
+            totalCals += Double.parseDouble(model.getTotalCalories());
+        }
+        totalCalsForDay.setText(String.format("%s", totalCals));
+        foodLog.setAdapter(adapter);
     }
 
     @NonNull
@@ -52,14 +68,16 @@ public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogMo
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView date;
-        TextView foodLog;
+        ListView foodLogListView;
+        TextView totalCalsForDay;
         OnDailyDietLogClickListener onDailyDietLogClickListener;
 
         ViewHolder(View itemView, OnDailyDietLogClickListener onDailyDietLogClickListener) {
             super(itemView);
 
             this.date = itemView.findViewById(R.id.dailyDietLogDateLabel);
-            this.foodLog = itemView.findViewById(R.id.foodLogLabel);
+            this.foodLogListView = itemView.findViewById(R.id.foodLogListView);
+            this.totalCalsForDay = itemView.findViewById(R.id.totalCalsForDayEntry);
             this.onDailyDietLogClickListener = onDailyDietLogClickListener;
 
             itemView.setOnClickListener(this);
@@ -70,20 +88,19 @@ public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogMo
             onDailyDietLogClickListener.onDailyDietLogClick(getAdapterPosition());
         }
 
-        private String setFoodLog(ArrayList<FoodModel> foodLog){
-            StringBuilder formattedString = new StringBuilder();
-            Double calorieSum = 0.0;
-
+        private List<LoggedFoodModel> setFoodLogListViewAdapter(ArrayList<FoodModel> foodLog){
+            List<LoggedFoodModel> loggedFoodList = new ArrayList<>();
             for(FoodModel foodModel : foodLog){
-                formattedString.append(foodModel.getFoodName()).append(" ");
-                formattedString.append("Servings: ").append(foodModel.getServingsConsumed()).append(" + ");
-                formattedString.append("Calories per serving: ").append(foodModel.getCalories()).append(" = ");
-                formattedString.append(foodModel.getTotalCalsConsumed()).append("\n");
-                calorieSum += foodModel.getTotalCalsConsumed();
+                loggedFoodList.add(
+                        new LoggedFoodModel(
+                                foodModel.getFoodName(),
+                                foodModel.getCalories().toString(),
+                                foodModel.getServingsConsumed().toString(),
+                                foodModel.getTotalCalsConsumed().toString()
+                        )
+                );
             }
-            formattedString.append("Total Calories Consumed: ").append(calorieSum);
-
-            return formattedString.toString();
+            return loggedFoodList;
         }
     }
 
