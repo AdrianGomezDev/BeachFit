@@ -68,11 +68,6 @@ public class Fitness extends Fragment{
 
         // Set up RecyclerView
         RecyclerView recyclerView = layout.findViewById(R.id.fitnessRecyclerView);
-        // Add dividers to recyclerView
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
-        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
 
         //Fetch Exercises from FireStore

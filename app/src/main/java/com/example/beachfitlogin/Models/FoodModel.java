@@ -169,17 +169,17 @@ public class FoodModel implements Serializable {
 
     @Override
     public String toString() {
-        return  "Serving Quantity: " + servingQuantity    +  "\n" +
-                "    Serving Unit: " + servingUnit        +  "\n" +
-                "  Serving Weight: " + servingWeight      + "g\n" +
-                "        Calories: " + calories           + "g\n" +
-                "       Total Fat: " + totalFat           + "g\n" +
-                "   Saturated Fat: " + saturatedFat       + "g\n" +
-                "     Cholesterol: " + cholesterol        + "mg\n" +
-                "          Sodium: " + sodium             + "mg\n" +
-                "     Total Carbs: " + totalCarbs         + "g\n" +
-                "   Dietary Fiber: " + dietaryFiber       + "g\n" +
-                "          Sugars: " + sugars             + "g\n" +
-                "         Protein: " + protein            + "g\n";
+        return  " Serving Qty: " + servingQuantity    +  "\n" +
+                "Serving Unit: " + servingUnit        +  "\n" +
+                "  Serving Wt: " + servingWeight      + "g\n" +
+                "    Calories: " + calories           + "g\n" +
+                "   Total Fat: " + totalFat           + "g\n" +
+                "    Sat Fats: " + saturatedFat       + "g\n" +
+                " Cholesterol: " + cholesterol        + "mg\n" +
+                "      Sodium: " + sodium             + "mg\n" +
+                " Total Carbs: " + totalCarbs         + "g\n" +
+                "  Diet Fiber: " + dietaryFiber       + "g\n" +
+                "      Sugars: " + sugars             + "g\n" +
+                "     Protein: " + protein            + "g\n";
     }
 }

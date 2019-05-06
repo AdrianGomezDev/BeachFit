@@ -6,11 +6,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.beachfitlogin.Adapters.DailyDietLogAdapter;
@@ -69,9 +69,10 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
 
     private EditText searchBarView;
     private ProgressBar progressBar;
-    private NestedScrollView suggestionsScrollView;
+    private View clickCatcherView;
+    private CardView suggestionsCardView;
     private RecyclerView suggestionsRecycler;
-    private NestedScrollView nutrientsScrollView;
+    private CardView nutrientsCardView;
     private LinearLayout nutrientsView;
     private TextView nutrientsText;
     private TextView nutrientsTitleText;
@@ -97,43 +98,39 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
         Objects.requireNonNull(getActivity()).setTitle("Diet"); // Set fragment title
         View layout = inflater.inflate(R.layout.fragment_diet, container, false); // Inflate main layout
 
-        // Custom divider decoration for recyclerViews
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
-                new LinearLayoutManager(getActivity()).getOrientation());
-        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider)));
-
         searchBarView = layout.findViewById(R.id.foodSearchBar);
         ImageButton searchButton = layout.findViewById(R.id.foodSearchButton);
         progressBar = layout.findViewById(R.id.searchProgressBar);
-        FrameLayout recyclerFrame = layout.findViewById(R.id.recyclerFrame);
-        suggestionsScrollView = layout.findViewById(R.id.suggestionsScroll);
+        suggestionsCardView = layout.findViewById(R.id.suggestionsCardView);
         suggestionsRecycler = layout.findViewById(R.id.searchSuggestionsRecyclerView);
-        nutrientsScrollView = layout.findViewById(R.id.nutrientsScrollView);
+        nutrientsCardView = layout.findViewById(R.id.nutrientsCardView);
         nutrientsView = layout.findViewById(R.id.nutrientsLayout);
         nutrientsText = layout.findViewById(R.id.nutrientInfoView);
         nutrientsTitleText = layout.findViewById(R.id.foodTitleView);
         nutrientsImage = layout.findViewById(R.id.foodImageNutrientView);
         addToFoodLog = layout.findViewById(R.id.addToMyFoodLogButton);
         backToDietLog = layout.findViewById(R.id.backToDietLogsButton);
-
-        // Hide suggestions if user clicks outside of suggestions scroll view
-        recyclerFrame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nutrientsScrollView.setVisibility(View.GONE);
-                suggestionsScrollView.setVisibility(View.GONE);
-            }
-        });
+        FrameLayout recyclerFrame = layout.findViewById(R.id.recyclerFrame);
+        clickCatcherView = layout.findViewById(R.id.clickCatcherView);
 
         // suggestionsRecycler displays the search results for the food that the user entered
         suggestionsRecycler.setHasFixedSize(true);
-        suggestionsRecycler.addItemDecoration(dividerItemDecoration);
+        suggestionsRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         suggestionsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // dietLogRecycler displays the daily food logs that are currently in the database
         RecyclerView dietLogRecycler = layout.findViewById(R.id.dietLogRecyclerView);
-        dietLogRecycler.addItemDecoration(dividerItemDecoration);
         dietLogRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // Remove the suggestions view if user clicks outside of search suggestions area
+        clickCatcherView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nutrientsCardView.setVisibility(View.GONE);
+                suggestionsCardView.setVisibility(View.GONE);
+                clickCatcherView.setVisibility(View.GONE);
+            }
+        });
 
         // TODO: Updates search results every time user enters a letter
         // TODO: Uncomment to enable
@@ -154,6 +151,8 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                nutrientsCardView.setVisibility(View.GONE);
+                clickCatcherView.setVisibility(View.VISIBLE);
                 hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
                 new RetrieveSearchSuggestionsTask().execute();
             }
@@ -215,8 +214,8 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
     @Override
     public void onDailyDietLogClick(int position) {
         // Hide suggestions if user clicks outside of suggestions scroll view
-        suggestionsScrollView.setVisibility(View.GONE);
-        nutrientsScrollView.setVisibility(View.GONE);
+        suggestionsCardView.setVisibility(View.GONE);
+        nutrientsCardView.setVisibility(View.GONE);
     }
 
     //**************************************** API Calls *****************************************//
@@ -224,7 +223,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
     @SuppressLint("StaticFieldLeak")
     private class RetrieveNutritionInfoTask extends AsyncTask<Object, Void, String> {
         protected  void onPreExecute() {
-            suggestionsScrollView.setVisibility(View.GONE);
+            suggestionsCardView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
 
@@ -287,7 +286,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
                 backToDietLog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        nutrientsScrollView.setVisibility(View.GONE);
+                        nutrientsCardView.setVisibility(View.GONE);
                     }
                 });
             } catch (JSONException e) {
@@ -312,7 +311,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
             }
             nutrientsView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
-            suggestionsScrollView.setVisibility(View.GONE);
+            suggestionsCardView.setVisibility(View.GONE);
         }
 
         protected String doInBackground(Void... urls) {
@@ -338,7 +337,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
             }
 
             progressBar.setVisibility(View.GONE);
-            suggestionsScrollView.setVisibility(View.VISIBLE);
+            suggestionsCardView.setVisibility(View.VISIBLE);
 
             try {
                 foodList.clear();
@@ -356,7 +355,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
                     }
                 }
                 suggestionsRecycler.setAdapter(new FoodAdapter(foodList, this));
-                suggestionsScrollView.scrollTo(0,0);
+                suggestionsCardView.scrollTo(0,0);
             } catch (JSONException e) {
                 Log.e("ERROR", e.getMessage(), e);
                 e.printStackTrace();
@@ -366,8 +365,8 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
         @Override
         public void onFoodClick(int position) {
             searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
-            suggestionsScrollView.setVisibility(View.GONE);
-            nutrientsScrollView.setVisibility(View.VISIBLE);
+            suggestionsCardView.setVisibility(View.GONE);
+            nutrientsCardView.setVisibility(View.VISIBLE);
             String foodName = foodList.get(position).getFoodName();
             String foodImage = foodList.get(position).getPhotoThumb().toString();
             new RetrieveNutritionInfoTask().execute(foodName, foodImage);
