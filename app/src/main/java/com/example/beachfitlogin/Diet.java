@@ -163,6 +163,7 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
                 if(!isEmpty(searchBarView) && actionId == EditorInfo.IME_ACTION_DONE){
                     hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
+                    nutrientsCardView.setVisibility(View.GONE);
                     new RetrieveSearchSuggestionsTask().execute();
                     return true;
                 }
