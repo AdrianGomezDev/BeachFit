@@ -34,23 +34,24 @@ public class DailyDietLogModel {
         ArrayList<FoodModel> myFoodLog = new ArrayList<>();
 
         for (Map.Entry<String, Map<String, Object>> parentPair : foodLog.entrySet()) {
+
             FoodModel foodModel = new FoodModel(
-                    parentPair.getValue().get("foodName").toString(),
+                    Objects.requireNonNull(parentPair.getValue().get("foodName")).toString(),
                     Uri.parse(Objects.requireNonNull(parentPair.getValue().get("photoThumb")).toString()),
-                    Double.parseDouble(parentPair.getValue().get("servingQuantity").toString()),
-                    parentPair.getValue().get("servingUnit").toString(),
-                    Double.parseDouble(parentPair.getValue().get("servingWeight").toString()),
-                    Double.parseDouble(parentPair.getValue().get("calories").toString()),
-                    Double.parseDouble(parentPair.getValue().get("totalFat").toString()),
-                    Double.parseDouble(parentPair.getValue().get("saturatedFat").toString()),
-                    Double.parseDouble(parentPair.getValue().get("cholesterol").toString()),
-                    Double.parseDouble(parentPair.getValue().get("sodium").toString()),
-                    Double.parseDouble(parentPair.getValue().get("totalCarbs").toString()),
-                    Double.parseDouble(parentPair.getValue().get("dietaryFiber").toString()),
-                    Double.parseDouble(parentPair.getValue().get("sugars").toString()),
-                    Double.parseDouble(parentPair.getValue().get("protein").toString()),
-                    Double.parseDouble(parentPair.getValue().get("servingsConsumed").toString()),
-                    Double.parseDouble(parentPair.getValue().get("totalCalsConsumed").toString())
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("servingQuantity")).toString()),
+                    Objects.requireNonNull(parentPair.getValue().get("servingUnit")).toString(),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("servingWeight")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("calories")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("totalFat")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("saturatedFat")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("cholesterol")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("sodium")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("totalCarbs")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("dietaryFiber")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("sugars")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("protein")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("servingsConsumed")).toString()),
+                    Double.parseDouble(Objects.requireNonNull(parentPair.getValue().get("totalCalsConsumed")).toString())
             );
             myFoodLog.add(foodModel);
         }

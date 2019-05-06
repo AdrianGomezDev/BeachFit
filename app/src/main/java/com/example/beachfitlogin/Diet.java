@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,12 +20,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.beachfitlogin.Adapters.DailyDietLogAdapter;
@@ -56,6 +53,7 @@ import java.util.Objects;
 
 import static com.example.beachfitlogin.Util.capitalizeString;
 import static com.example.beachfitlogin.Util.hideKeyboardFrom;
+import static com.example.beachfitlogin.Util.isEmpty;
 import static com.example.beachfitlogin.Util.myDoubleParser;
 
 public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLogClickListener{
@@ -110,7 +108,6 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
         nutrientsImage = layout.findViewById(R.id.foodImageNutrientView);
         addToFoodLog = layout.findViewById(R.id.addToMyFoodLogButton);
         backToDietLog = layout.findViewById(R.id.backToDietLogsButton);
-        FrameLayout recyclerFrame = layout.findViewById(R.id.recyclerFrame);
         clickCatcherView = layout.findViewById(R.id.clickCatcherView);
 
         // suggestionsRecycler displays the search results for the food that the user entered
@@ -151,10 +148,12 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nutrientsCardView.setVisibility(View.GONE);
-                clickCatcherView.setVisibility(View.VISIBLE);
-                hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
-                new RetrieveSearchSuggestionsTask().execute();
+                if(!isEmpty(searchBarView)) {
+                    nutrientsCardView.setVisibility(View.GONE);
+                    clickCatcherView.setVisibility(View.VISIBLE);
+                    hideKeyboardFrom(Objects.requireNonNull(getContext()), searchBarView);
+                    new RetrieveSearchSuggestionsTask().execute();
+                }
             }
         });
 
