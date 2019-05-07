@@ -145,7 +145,7 @@ public class NavigationActivity extends AppCompatActivity
                 newFragment = new StepCounter();
                 break;
             case R.id.nav_share:
-                newFragment = new Share();
+                newFragment = new ContactUs();
                 break;
         }
 

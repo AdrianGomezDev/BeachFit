@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
 
-public class Share extends Fragment{
+public class ContactUs extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -22,7 +22,7 @@ public class Share extends Fragment{
 
     private OnFragmentInteractionListener mListener;
 
-    public Share() {
+    public ContactUs() {
         // Required empty public constructor
     }
 
@@ -32,11 +32,11 @@ public class Share extends Fragment{
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Share.
+     * @return A new instance of fragment ContactUs.
      */
     // TODO: Rename and change types and number of parameters
-    public static Share newInstance(String param1, String param2) {
-        Share fragment = new Share();
+    public static ContactUs newInstance(String param1, String param2) {
+        ContactUs fragment = new ContactUs();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,15 +56,15 @@ public class Share extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Share");
+        getActivity().setTitle("ContactUs");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_share, container, false);
+        return inflater.inflate(R.layout.fragment_contact_us, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentMessage("Share", uri);
+            mListener.onFragmentMessage("ContactUs", uri);
         }
     }
 
