@@ -88,4 +88,6 @@
     <string name="_0">0</string>
     <string name="food_name">Food Name</string>
     <string name="total_calories_for_this_day">Total Calories for this Day:</string>
+    <string name="exercise">Exercise</string>
+    <string name="statistics">Statistics</string>
 </resources>

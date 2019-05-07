@@ -3,20 +3,25 @@ package com.example.beachfitlogin;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.beachfitlogin.Adapters.DailyFitnessLogAdapter;
+import com.example.beachfitlogin.Adapters.ExerciseAdapter;
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
+import com.example.beachfitlogin.Models.DailyFitnessLogModel;
 import com.example.beachfitlogin.Models.ExerciseModel;
+import com.example.beachfitlogin.ViewHolders.DailyFitnessLogViewHolder;
 import com.example.beachfitlogin.ViewHolders.ExerciseViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -29,8 +34,10 @@ public class Fitness extends Fragment{
     private static final String ARG_PARAM2 = "param2";
 
     private OnFragmentInteractionListener mListener;
+    private DailyFitnessLogAdapter.OnDailyFitnessLogClickListener onDailyFitnessLogClickListener;
 
-    private FirestoreRecyclerAdapter<ExerciseModel, ExerciseViewHolder> adapter;
+    private FirestoreRecyclerAdapter<ExerciseModel, ExerciseViewHolder> exerciseAdapter;
+    private FirestoreRecyclerAdapter<DailyFitnessLogModel, DailyFitnessLogViewHolder> fitnessAdapter;
 
     public Fitness() {
         // Required empty public constructor
@@ -62,49 +69,59 @@ public class Fitness extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         Objects.requireNonNull(getActivity()).setTitle("Fitness");
         View layout = inflater.inflate(R.layout.fragment_fitness, container, false);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Set up RecyclerView
-        RecyclerView recyclerView = layout.findViewById(R.id.fitnessRecyclerView);
-        recyclerView.setLayoutManager(layoutManager);
+        // Set up exerciseRecycler
+        final RecyclerView exerciseRecycler = layout.findViewById(R.id.exerciseRecycler);
+        exerciseRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //Fetch Exercises from FireStore
-        Query query = FirebaseFirestore.getInstance().collection("Exercises")
-                .orderBy("Name", Query.Direction.ASCENDING);
+        // Set up Fitness Diet Logs recycler
+        final RecyclerView fitnessLogsRecycler = layout.findViewById(R.id.fitnessLogsRecycler);
+        fitnessLogsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        FirestoreRecyclerOptions<ExerciseModel> options = new FirestoreRecyclerOptions.Builder<ExerciseModel>()
-                .setQuery(query, ExerciseModel.class)
+        // Set up fitness logs query
+        Query query = db.collection("users")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .collection("Fitness Logs")
+                .orderBy("date", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<DailyFitnessLogModel> options = new FirestoreRecyclerOptions.Builder<DailyFitnessLogModel>()
+                .setQuery(query, DailyFitnessLogModel.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<ExerciseModel, ExerciseViewHolder>(options) {
-
+        // TODO: can place actions in here on fitness log click
+        onDailyFitnessLogClickListener = new DailyFitnessLogAdapter.OnDailyFitnessLogClickListener() {
             @Override
-            public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position, @NonNull ExerciseModel exerciseModel) {
-                final String exerciseName = exerciseModel.getName();
-                holder.setExerciseName(exerciseName);
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        onButtonPressed(exerciseName);
-                    }
-                });
-            }
-
-            @NonNull
-            @Override
-            public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup group, int i) {
-                View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.item_exercise, group, false);
-
-                return new ExerciseViewHolder(view);
+            public void onDailyFitnessLogClick(int position) {
+                //Do nothing for now
+                Toast.makeText(getContext(), position+"", Toast.LENGTH_SHORT).show();
             }
         };
-        recyclerView.setAdapter(adapter);
+        fitnessAdapter = new DailyFitnessLogAdapter(options, onDailyFitnessLogClickListener);
+        fitnessLogsRecycler.setAdapter(fitnessAdapter);
 
-        // Inflate the layout for this fragment
-        return layout;
+        final FloatingActionButton addExerciseFAB = layout.findViewById(R.id.fitnessFAB);
+        addExerciseFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fitnessLogsRecycler.setVisibility(View.GONE);
+                addExerciseFAB.hide();
+                exerciseRecycler.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //Fetch Exercises from FireStore to populate exerciseRecycler
+        query = db.collection("Exercises")
+                .orderBy("Name", Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<ExerciseModel> exerciseOptions = new FirestoreRecyclerOptions.Builder<ExerciseModel>()
+                .setQuery(query, ExerciseModel.class)
+                .build();
+        exerciseAdapter = new ExerciseAdapter(exerciseOptions, mListener);
+        exerciseRecycler.setAdapter(exerciseAdapter);
+
+        return layout; // Inflate the layout for this fragment
     }
 
     public void onButtonPressed(String exerciseName) {
@@ -133,12 +150,14 @@ public class Fitness extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        exerciseAdapter.startListening();
+        fitnessAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        exerciseAdapter.stopListening();
+        fitnessAdapter.stopListening();
     }
 }

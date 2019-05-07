@@ -12,13 +12,12 @@ import android.widget.TextView;
 import com.example.beachfitlogin.Models.LoggedFoodModel;
 import com.example.beachfitlogin.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoggedFoodAdapter extends ArrayAdapter<LoggedFoodModel>{
 
     private Context context;
-    private List<LoggedFoodModel> foodList = new ArrayList<>();
+    private List<LoggedFoodModel> foodList;
 
     public LoggedFoodAdapter(Context context, List<LoggedFoodModel> foodList) {
         super(context, 0, foodList);

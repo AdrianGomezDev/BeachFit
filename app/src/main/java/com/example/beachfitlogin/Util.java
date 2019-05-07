@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 
 public final class Util {
@@ -62,6 +64,12 @@ public final class Util {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    // Rounds a double to two decimal places and returns as a String
+    public static String roundDouble(Double number){
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        return formatter.format(number);
     }
 
     /**

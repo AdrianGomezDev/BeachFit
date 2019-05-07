@@ -6,22 +6,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.beachfitlogin.Models.DailyDietLogModel;
 import com.example.beachfitlogin.Models.FoodModel;
 import com.example.beachfitlogin.Models.LoggedFoodModel;
-import com.example.beachfitlogin.NavigationActivity;
 import com.example.beachfitlogin.R;
-import com.example.beachfitlogin.Util;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.beachfitlogin.Util.roundDouble;
 
 public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogModel, DailyDietLogAdapter.ViewHolder> {
 
@@ -52,7 +52,7 @@ public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogMo
         for(LoggedFoodModel model: loggedFoodList){
             totalCals += Double.parseDouble(model.getTotalCalories());
         }
-        totalCalsForDay.setText(String.format("%s", totalCals));
+        totalCalsForDay.setText(roundDouble(totalCals));
         foodLog.setAdapter(adapter);
     }
 
@@ -96,7 +96,7 @@ public class DailyDietLogAdapter extends FirestoreRecyclerAdapter<DailyDietLogMo
                                 foodModel.getFoodName(),
                                 foodModel.getCalories().toString(),
                                 foodModel.getServingsConsumed().toString(),
-                                foodModel.getTotalCalsConsumed().toString()
+                                roundDouble(foodModel.getTotalCalsConsumed())
                         )
                 );
             }

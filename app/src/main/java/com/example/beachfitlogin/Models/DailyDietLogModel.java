@@ -5,6 +5,7 @@ import android.net.Uri;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class DailyDietLogModel {
 
     public DailyDietLogModel(Date date, Map<String, Map<String, Object>> foodLog) {
         this.date = date;
-        this.foodLog = foodLog;
+        this.foodLog = new HashMap<>(foodLog);
     }
 
     public String getDate() {
