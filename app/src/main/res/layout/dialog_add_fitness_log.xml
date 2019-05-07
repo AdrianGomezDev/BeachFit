@@ -17,10 +17,7 @@
             android:text="@string/repetitions"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/repsInput"
-            app:layout_constraintEnd_toStartOf="@+id/repsInput"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/setsLabel"
             app:layout_constraintTop_toTopOf="@+id/repsInput" />
 
         <EditText
@@ -28,15 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/enter_repetitions"
             android:inputType="numberDecimal"
             android:longClickable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/setsInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/repsLabel"
             app:layout_constraintTop_toBottomOf="@+id/weightInput" />
 
@@ -47,10 +41,7 @@
             android:text="@string/sets"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/setsInput"
-            app:layout_constraintEnd_toStartOf="@+id/setsInput"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/distanceLabel"
             app:layout_constraintTop_toTopOf="@+id/setsInput" />
 
         <EditText
@@ -58,15 +49,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/enter_sets"
             android:inputType="numberDecimal"
             android:longClickable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/distanceInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/setsLabel"
             app:layout_constraintTop_toBottomOf="@+id/repsInput" />
 
@@ -77,10 +65,7 @@
             android:text="@string/weight"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/weightInput"
-            app:layout_constraintEnd_toStartOf="@+id/weightInput"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/repsLabel"
             app:layout_constraintTop_toTopOf="@+id/weightInput" />
 
         <EditText
@@ -88,18 +73,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/enter_weight"
             android:inputType="numberDecimal"
             android:longClickable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/repsInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/weightLabel"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/weightUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/lbs"
+            app:layout_constraintBottom_toBottomOf="@+id/weightInput"
+            app:layout_constraintStart_toEndOf="@+id/weightInput"
+            app:layout_constraintTop_toTopOf="@+id/weightInput" />
 
         <TextView
             android:id="@+id/distanceLabel"
@@ -108,30 +100,32 @@
             android:text="@string/distance"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/distanceInput"
-            app:layout_constraintEnd_toStartOf="@+id/distanceInput"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/distanceInput"
-            android:visibility="gone"/>
+            app:layout_constraintEnd_toEndOf="@+id/durationLabel"
+            app:layout_constraintTop_toTopOf="@+id/distanceInput" />
 
         <EditText
             android:id="@+id/distanceInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/enter_distance"
             android:inputType="numberDecimal"
             android:longClickable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/durationInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/distanceLabel"
-            app:layout_constraintTop_toBottomOf="@+id/setsInput"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toBottomOf="@+id/setsInput" />
+
+        <TextView
+            android:id="@+id/distanceUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/miles"
+            app:layout_constraintBottom_toBottomOf="@+id/distanceInput"
+            app:layout_constraintStart_toEndOf="@+id/distanceInput"
+            app:layout_constraintTop_toTopOf="@+id/distanceInput" />
 
         <TextView
             android:id="@+id/durationLabel"
@@ -140,42 +134,51 @@
             android:text="@string/duration"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/durationInput"
+            app:layout_constraintEnd_toEndOf="@+id/dateOfExerciseLabel"
             app:layout_constraintEnd_toStartOf="@+id/durationInput"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/durationInput"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="@+id/durationInput" />
 
         <EditText
             android:id="@+id/durationInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/enter_duration"
             android:inputType="numberDecimal"
             android:longClickable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/dateOfExerciseInput"
+            app:layout_constraintEnd_toStartOf="@+id/durationUnits"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/durationLabel"
+            app:layout_constraintTop_toBottomOf="@+id/distanceInput" />
+
+        <TextView
+            android:id="@+id/durationUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/minutes"
+            app:layout_constraintBottom_toBottomOf="@+id/durationInput"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/durationLabel"
-            app:layout_constraintTop_toBottomOf="@+id/distanceInput"
-            android:visibility="gone"/>
+            app:layout_constraintStart_toEndOf="@+id/durationInput"
+            app:layout_constraintTop_toTopOf="@+id/durationInput" />
 
         <TextView
             android:id="@+id/dateOfExerciseLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@string/date_of_meal"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/dateOfExerciseInput"
-            app:layout_constraintEnd_toStartOf="@+id/dateOfExerciseInput"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/durationInput"
             app:layout_constraintTop_toTopOf="@+id/dateOfExerciseInput" />
 
         <TextView
@@ -183,7 +186,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="?attr/editTextBackground"
             android:hint="@string/mm_dd_yyyy"
@@ -192,8 +194,6 @@
             android:textIsSelectable="false"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/dateOfExerciseLabel"
             app:layout_constraintTop_toBottomOf="@+id/durationInput" />
 

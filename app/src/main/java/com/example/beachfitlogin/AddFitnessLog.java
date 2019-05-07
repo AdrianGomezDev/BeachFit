@@ -73,6 +73,7 @@ public class AddFitnessLog extends DialogFragment {
         TextView repsLabel = layout.findViewById(R.id.repsLabel);
         TextView setsLabel = layout.findViewById(R.id.setsLabel);
         TextView weightLabel = layout.findViewById(R.id.weightLabel);
+        TextView weightUnits = layout.findViewById(R.id.weightUnits);
         repsInput = layout.findViewById(R.id.repsInput);
         setsInput = layout.findViewById(R.id.setsInput);
         weightInput = layout.findViewById(R.id.weightInput);
@@ -80,6 +81,8 @@ public class AddFitnessLog extends DialogFragment {
         // Cardio exercises' input fields and labels
         TextView distanceLabel = layout.findViewById(R.id.distanceLabel);
         TextView durationLabel = layout.findViewById(R.id.durationLabel);
+        TextView distanceUnits = layout.findViewById(R.id.distanceUnits);
+        TextView durationUnits = layout.findViewById(R.id.durationUnits);
         distanceInput = layout.findViewById(R.id.distanceInput);
         durationInput = layout.findViewById(R.id.durationInput);
 
@@ -88,6 +91,7 @@ public class AddFitnessLog extends DialogFragment {
         if(exerciseModel.getType().equals("Strength")){
             weightLabel.setVisibility(View.VISIBLE);
             weightInput.setVisibility(View.VISIBLE);
+            weightUnits.setVisibility(View.VISIBLE);
             repsLabel.setVisibility(View.VISIBLE);
             repsInput.setVisibility(View.VISIBLE);
             setsLabel.setVisibility(View.VISIBLE);
@@ -95,12 +99,15 @@ public class AddFitnessLog extends DialogFragment {
 
             distanceLabel.setVisibility(View.GONE);
             distanceInput.setVisibility(View.GONE);
+            distanceUnits.setVisibility(View.GONE);
             durationLabel.setVisibility(View.GONE);
             durationInput.setVisibility(View.GONE);
+            durationUnits.setVisibility(View.GONE);
         }
         else if(exerciseModel.getType().equals("Cardio")){
             weightLabel.setVisibility(View.GONE);
             weightInput.setVisibility(View.GONE);
+            weightUnits.setVisibility(View.GONE);
             repsLabel.setVisibility(View.GONE);
             repsInput.setVisibility(View.GONE);
             setsLabel.setVisibility(View.GONE);
@@ -108,8 +115,10 @@ public class AddFitnessLog extends DialogFragment {
 
             distanceLabel.setVisibility(View.VISIBLE);
             distanceInput.setVisibility(View.VISIBLE);
+            distanceUnits.setVisibility(View.VISIBLE);
             durationLabel.setVisibility(View.VISIBLE);
             durationInput.setVisibility(View.VISIBLE);
+            durationUnits.setVisibility(View.VISIBLE);
         }
 
         // Get date of the meal from user, default is the current date.

@@ -40,7 +40,19 @@ public class LoggedExerciseAdapter extends ArrayAdapter<LoggedExerciseModel> {
         TextView exerciseStats = listItem.findViewById(R.id.exerciseStatsColumnEntry);
         StringBuilder statsString = new StringBuilder();
         for (Map.Entry<String, Double> entry : loggedExerciseModel.getExerciseStats().entrySet()) {
-            statsString.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            statsString.append(entry.getKey()).append(": ").append(entry.getValue());
+            switch (entry.getKey()) {
+                case "weight":
+                    statsString.append(" lbs");
+                    break;
+                case "distance":
+                    statsString.append(" miles");
+                    break;
+                case "duration":
+                    statsString.append(" minutes");
+                    break;
+            }
+            statsString.append("\n");
         }
         exerciseStats.setText(statsString.toString().trim());
 

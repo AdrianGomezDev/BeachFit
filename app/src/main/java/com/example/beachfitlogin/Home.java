@@ -3,12 +3,25 @@ package com.example.beachfitlogin;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 public class Home extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -56,9 +69,34 @@ public class Home extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Home");
+        Objects.requireNonNull(getActivity()).setTitle("Home");
+        View layout = inflater.inflate(R.layout.fragment_home, container, false);
+
+        final TextView textView = layout.findViewById(R.id.greetingTextView);
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        String firstName = document.getString("firstName");
+                        Log.i("FireStore", firstName);
+                        String str = "Hello!\n Welcome to BeachFit " + Util.capitalizeString(Objects.requireNonNull(firstName)) + "!";
+                        textView.setText(str);
+                    } else {
+                        Log.d("FireStore", "No such document");
+                    }
+                } else {
+                    Log.d("FireStore", "get failed with ", task.getException());
+                }
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
