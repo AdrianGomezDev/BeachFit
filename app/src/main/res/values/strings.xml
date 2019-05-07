@@ -90,4 +90,15 @@
     <string name="total_calories_for_this_day">Total Calories for this Day:</string>
     <string name="exercise">Exercise</string>
     <string name="statistics">Statistics</string>
+    <string name="add_to_fitness_log">Add to Fitness Log</string>
+    <string name="repetitions">Repetitions:</string>
+    <string name="enter_repetitions">Enter repetitions</string>
+    <string name="sets">Sets:</string>
+    <string name="enter_sets">Enter sets</string>
+    <string name="weight">Weight:</string>
+    <string name="enter_weight">Enter weight</string>
+    <string name="distance">Distance</string>
+    <string name="enter_distance">Enter distance</string>
+    <string name="duration">Duration:</string>
+    <string name="enter_duration">Enter duration</string>
 </resources>

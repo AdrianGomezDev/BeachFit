@@ -3,6 +3,7 @@ package com.example.beachfitlogin;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,12 +102,21 @@ public class Exercise extends Fragment{
         muscleText = layout.findViewById(R.id.muscle_text_view);
         equipmentText = layout.findViewById(R.id.equipment_text_view);
         instructionsList = layout.findViewById(R.id.instructions_list_view);
-        Button playButton = layout.findViewById(R.id.playVideoButton);
 
+        Button playButton = layout.findViewById(R.id.playVideoButton);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onButtonPressed(exerciseModel.getVideo());
+            }
+        });
+
+        Button addToFitnessLogButton = layout.findViewById(R.id.addToFitnessLogButton);
+        addToFitnessLogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialogFragment = AddFitnessLog.newInstance(exerciseModel);
+                dialogFragment.show(getChildFragmentManager(), "Exercise Log");
             }
         });
 

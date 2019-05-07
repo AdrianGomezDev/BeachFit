@@ -72,6 +72,7 @@ public class AddFoodLog extends DialogFragment {
         myCalendar = Calendar.getInstance();
         myCalendar.setTime(new Date());
         setTimeToZero(myCalendar);
+        final SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -80,13 +81,11 @@ public class AddFoodLog extends DialogFragment {
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 setTimeToZero(myCalendar);
                 timestamp = new Date(myCalendar.getTimeInMillis());
-                String myFormat = "MMM dd, yyyy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
                 dateInput.setText(sdf.format(myCalendar.getTime()));
             }
         };
         timestamp = new Date(myCalendar.getTimeInMillis());
-        dateInput.setText(DateFormat.getDateInstance().format(timestamp));
+        dateInput.setText(sdf.format(timestamp));
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

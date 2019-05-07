@@ -1,9 +1,10 @@
 package com.example.beachfitlogin.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ExerciseModel {
+public class ExerciseModel implements Serializable {
     private String Name;
     private String Equipment;
     private String Level;
