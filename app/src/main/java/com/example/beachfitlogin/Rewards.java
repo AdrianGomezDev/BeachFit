@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,10 +66,14 @@ public class Rewards extends Fragment{
         View view = inflater.inflate(R.layout.fragment_rewards, container, false);
 
         newReward = view.findViewById(R.id.fab);
+
+        final RewardModel rewardModel = new RewardModel("");
+
         newReward.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(getActivity(),"Testing FAB R!",Toast.LENGTH_LONG).show();
+                DialogFragment dialogFragment = AddRewardLog.newInstance(rewardModel);
+                dialogFragment.show(getChildFragmentManager(), "Reward Log");
             }
         });
 

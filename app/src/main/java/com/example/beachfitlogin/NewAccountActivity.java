@@ -139,6 +139,7 @@ public class NewAccountActivity extends AppCompatActivity {
                             intent.putExtra("lastName", lastNameText.getText().toString());
                             intent.putExtra("email", emailText.getText().toString());
                             intent.putExtra("age", ageText.getText().toString());
+                            intent.putExtra("points",0);
                             setResult(RESULT_OK, intent);
                             finish();
                         }

@@ -88,7 +88,6 @@
     <string name="_0">0</string>
     <string name="food_name">Food Name</string>
     <string name="total_calories_for_this_day">Total Calories for this Day:</string>
-    <string name="exercise">Exercise</string>
     <string name="statistics">Statistics</string>
     <string name="add_to_fitness_log">Add to Fitness Log</string>
     <string name="repetitions">Repetitions:</string>
@@ -105,4 +104,20 @@
     <string name="minutes">minutes</string>
     <string name="miles">miles</string>
     <string name="contact_us_send_any_questions_and_concerns_to_beachfit_firebase_app_com">Contact Us! Send Any Questions and Concerns to beachfit@firebase.app.com</string>
+    <string name="goalName">Name:</string>
+    <string name="nameofgoal">Enter Name of Goal</string>
+    <string name="dateofgoal">Date of Goal</string>
+    <string name="nameofreward">Name:</string>
+    <string name="rewardname">Enter Name of Reward</string>
+    <string name="dateofreward">Date of Reward</string>
+    <string name="num_hint">####</string>
+    <string name="exercise_label">Exercise</string>
+    <string name="name_edit">Name</string>
+    <string name="points_value">Points Value</string>
+    <string name="goalnamepage">Goal Name</string>
+    <string name="exname">Exercise Name</string>
+    <string name="points_values">Points Value:</string>
+    <string name="status">Status:</string>
+    <string name="complete_exclamation">Complete!</string>
+    <string name="back">BACK</string>
 </resources>

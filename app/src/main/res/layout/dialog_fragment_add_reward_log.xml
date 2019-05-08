@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRewardLog">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/servingSizeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/nameofreward"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rewardNameEditText"
+            app:layout_constraintEnd_toStartOf="@+id/rewardNameEditText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rewardNameEditText" />
+
+        <EditText
+            android:id="@+id/rewardNameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/rewardname"
+            android:textSize="14sp"
+            android:inputType="text"
+            android:longClickable="false"
+            app:layout_constraintBottom_toTopOf="@+id/dateOfRewardEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/servingSizeLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/dateOfMealLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dateofreward"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/dateOfRewardEditText"
+            app:layout_constraintEnd_toEndOf="@+id/servingSizeLabel"
+            app:layout_constraintTop_toTopOf="@+id/dateOfRewardEditText" />
+
+        <TextView
+            android:id="@+id/dateOfRewardEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/mm_dd_yyyy"
+            android:textSize="14sp"
+            android:longClickable="false"
+            android:background="?attr/editTextBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rewardNameEditText"
+            app:layout_constraintTop_toBottomOf="@+id/rewardNameEditText" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

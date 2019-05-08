@@ -96,8 +96,8 @@ public class Exercise extends Fragment{
 
         }
 
-        exerciseText = layout.findViewById(R.id.exercise_name_text_view);
-        typeText = layout.findViewById(R.id.type_text_view);
+        exerciseText = layout.findViewById(R.id.goal_name_text_view);
+        typeText = layout.findViewById(R.id.exercise_text_view);
         levelText = layout.findViewById(R.id.level_text_view);
         muscleText = layout.findViewById(R.id.muscle_text_view);
         equipmentText = layout.findViewById(R.id.equipment_text_view);
