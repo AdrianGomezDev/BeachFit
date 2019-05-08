@@ -41,7 +41,8 @@
         <activity
             android:name=".NavigationActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Camera"
             android:theme="@style/AppTheme.NoActionBar" />

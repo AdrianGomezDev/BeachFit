@@ -364,7 +364,6 @@ public class Diet extends Fragment implements DailyDietLogAdapter.OnDailyDietLog
 
         @Override
         public void onFoodClick(int position) {
-            searchBarView.onEditorAction(EditorInfo.IME_ACTION_DONE);
             suggestionsCardView.setVisibility(View.GONE);
             nutrientsCardView.setVisibility(View.VISIBLE);
             String foodName = foodList.get(position).getFoodName();

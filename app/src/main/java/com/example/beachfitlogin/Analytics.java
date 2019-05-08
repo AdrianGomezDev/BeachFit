@@ -11,16 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -75,6 +84,42 @@ public class Analytics extends Fragment{
 
         View layout = inflater.inflate(R.layout.fragment_analytics, container, false);
 
+        BarChart barChart =  layout.findViewById(R.id.barGraphView);
+
+        ArrayList NoOfEmp = new ArrayList();
+
+        NoOfEmp.add(new BarEntry(945f, 0, 2008));
+        NoOfEmp.add(new BarEntry(1040f, 1, 2009));
+        NoOfEmp.add(new BarEntry(1133f, 2));
+        NoOfEmp.add(new BarEntry(1240f, 3));
+        NoOfEmp.add(new BarEntry(1369f, 4));
+        NoOfEmp.add(new BarEntry(1487f, 5));
+        NoOfEmp.add(new BarEntry(1501f, 6));
+        NoOfEmp.add(new BarEntry(1645f, 7));
+        NoOfEmp.add(new BarEntry(1578f, 8));
+        NoOfEmp.add(new BarEntry(1695f, 9));
+
+        ArrayList year = new ArrayList();
+
+        year.add("2008");
+        year.add("2009");
+        year.add("2010");
+        year.add("2011");
+        year.add("2012");
+        year.add("2013");
+        year.add("2014");
+        year.add("2015");
+        year.add("2016");
+        year.add("2017");
+
+        BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
+        barChart.animateY(5000);
+        BarData barData = new BarData(bardataset);
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.setFitBars(true);
+        barChart.setData(barData);
+
+        //------------------------------------------------------------------------------------------
         LineChart chart = layout.findViewById(R.id.lineGraphView);
 
         ArrayList<Entry> entries = new ArrayList<>();
@@ -120,6 +165,27 @@ public class Analytics extends Fragment{
         chart.animateX(2500);
         //refresh
         chart.invalidate();
+
+        //------------------------------------------------------------------------------------------
+        PieChart pieChart = layout.findViewById(R.id.piechart);
+        ArrayList NoOfEmp1 = new ArrayList();
+
+        NoOfEmp1.add(new PieEntry(945f, "2008", 0));
+        NoOfEmp1.add(new PieEntry(1040f,"2009",1));
+        NoOfEmp1.add(new PieEntry(1133f,"2010", 2));
+        NoOfEmp1.add(new PieEntry(1240f,"2011", 3));
+        NoOfEmp1.add(new PieEntry(1369f,"2012", 4));
+        NoOfEmp1.add(new PieEntry(1487f,"2013", 5));
+        NoOfEmp1.add(new PieEntry(1501f,"2014", 6));
+        NoOfEmp1.add(new PieEntry(1645f,"2015",7));
+        NoOfEmp1.add(new PieEntry(1578f,"2016",8));
+        NoOfEmp1.add(new PieEntry(1695f,"2017",9));
+        PieDataSet dataSet1 = new PieDataSet(NoOfEmp1, "Number Of Employees");
+
+        PieData data1 = new PieData(dataSet1);
+        pieChart.setData(data1);
+        dataSet1.setColors(ColorTemplate.PASTEL_COLORS);
+        pieChart.animateXY(3000, 3000);
 
 
         // Inflate the layout for this fragment

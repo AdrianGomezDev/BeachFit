@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.beachfitlogin.Models.LoggedExerciseModel;
 import com.example.beachfitlogin.R;
+import com.example.beachfitlogin.Util;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class LoggedExerciseAdapter extends ArrayAdapter<LoggedExerciseModel> {
         TextView exerciseStats = listItem.findViewById(R.id.exerciseStatsColumnEntry);
         StringBuilder statsString = new StringBuilder();
         for (Map.Entry<String, Double> entry : loggedExerciseModel.getExerciseStats().entrySet()) {
-            statsString.append(entry.getKey()).append(": ").append(entry.getValue());
+            statsString.append(Util.capitalizeString(entry.getKey())).append(": ").append(entry.getValue());
             switch (entry.getKey()) {
                 case "weight":
                     statsString.append(" lbs");
