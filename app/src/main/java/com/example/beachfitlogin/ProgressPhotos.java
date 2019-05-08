@@ -12,14 +12,21 @@ import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.example.beachfitlogin.Adapters.Detail;
+import com.example.beachfitlogin.Adapters.PhotoAdapter;
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
 
 public class ProgressPhotos extends Fragment{
@@ -30,26 +37,19 @@ public class ProgressPhotos extends Fragment{
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Button photoButton;
     String currentPhotoPath;
+    GridView grid;
+    List<String> imageItems;
+    String imagePath="";
+    File savedFileDestination;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public ProgressPhotos() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProgressPhotos.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProgressPhotos newInstance(String param1, String param2) {
         ProgressPhotos fragment = new ProgressPhotos();
         Bundle args = new Bundle();
@@ -72,17 +72,54 @@ public class ProgressPhotos extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Progress Photos");
+        imagePath = Environment.getExternalStorageDirectory().toString();
+        imageItems = new ArrayList<>();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_progress_photos, container, false);
         photoButton = view.findViewById(R.id.photoButton);
-        photoButton.setOnClickListener(new View.OnClickListener() {
+        photoButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
             }
         });
-        return view;//inflater.inflate(R.layout.fragment_progress_photos, container, false);
+        //Grid Implementation
+        getImages();
+
+        grid = (GridView)view.findViewById(R.id.photogrid);
+        PhotoAdapter photoAdapter = new PhotoAdapter(this.getContext(), R.layout.fragment_progress_photos, imageItems);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String imagePath = parent.getAdapter().getItem(position).toString();
+                Intent intent = new Intent(ProgressPhotos.this, Detail.class);
+                intent.putExtra("imagePath", imagePath);
+                startActivity(intent);
+            }
+        });
+        grid.setAdapter(photoAdapter);
+
+        return view;
     }
+    private List<String> getImages() {
+        new File(imagePath).mkdirs();
+
+        File fileTarget = new File(imagePath);
+        File[] files = fileTarget.listFiles();
+
+        imageItems.clear();
+
+        if (files != null) {
+            for (File file : files) {
+                imageItems.add(file.getAbsolutePath());
+            }
+        }
+
+        return imageItems;
+    }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -132,7 +169,7 @@ public class ProgressPhotos extends Fragment{
         File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageName,".jpg", storageDirectory);
         currentPhotoPath = image.getAbsolutePath();
-        Toast.makeText(getActivity(),"Image returned", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(),"Image returned", Toast.LENGTH_LONG).show();
         return image;
     }
     @Override
