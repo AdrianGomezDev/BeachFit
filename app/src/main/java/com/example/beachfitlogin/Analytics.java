@@ -1,7 +1,6 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,9 +25,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -113,10 +110,9 @@ public class Analytics extends Fragment{
         year.add("2017");
 
         BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        barChart.animateY(5000);
+        barChart.animateY(3000);
         BarData barData = new BarData(bardataset);
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        barChart.setFitBars(true);
         barChart.setData(barData);
 
         //------------------------------------------------------------------------------------------

@@ -120,4 +120,6 @@
     <string name="status">Status:</string>
     <string name="complete_exclamation">Complete!</string>
     <string name="back">BACK</string>
+    <string name="exercise2">Exercise:</string>
+    <string name="exercise">Exercise</string>
 </resources>

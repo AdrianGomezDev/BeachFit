@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/exercise"
+            android:text="@string/exercise2"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/exercise_text_view"
