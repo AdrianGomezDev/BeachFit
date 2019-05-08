@@ -1,14 +1,29 @@
 package com.example.beachfitlogin;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.beachfitlogin.Interfaces.OnFragmentInteractionListener;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Analytics extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -56,9 +71,59 @@ public class Analytics extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Analytics");
+        Objects.requireNonNull(getActivity()).setTitle("Analytics");
+
+        View layout = inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        LineChart chart = layout.findViewById(R.id.lineGraphView);
+
+        ArrayList<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(0, 4));
+        entries.add(new Entry(1, 1));
+        entries.add(new Entry(2, 2));
+        entries.add(new Entry(3, 4));
+
+        LineDataSet dataSet = new LineDataSet(entries, "Customized values");
+        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+
+        //****
+        // Controlling X axis
+        XAxis xAxis = chart.getXAxis();
+        // Set the xAxis position to bottom. Default is top
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        //Customizing x axis value
+        final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr"};
+
+        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return months[(int) value];
+            }
+        };
+        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+        xAxis.setValueFormatter(formatter);
+
+        //***
+        // Controlling right side of y axis
+        YAxis yAxisRight = chart.getAxisRight();
+        yAxisRight.setEnabled(false);
+
+        //***
+        // Controlling left side of y axis
+        YAxis yAxisLeft = chart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+
+        // Setting Data
+        LineData data = new LineData(dataSet);
+        chart.setData(data);
+        chart.animateX(2500);
+        //refresh
+        chart.invalidate();
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false);
+        return layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
