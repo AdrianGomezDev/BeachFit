@@ -84,7 +84,7 @@ public class Home extends Fragment{
                     if (document != null) {
                         String firstName = document.getString("firstName");
                         Log.i("FireStore", firstName);
-                        String str = "Hello!\n Welcome to BeachFit " + Util.capitalizeString(Objects.requireNonNull(firstName)) + "!";
+                        String str = "Hello!\n Welcome to BeachFit, " + Util.capitalizeString(Objects.requireNonNull(firstName)) + "!";
                         textView.setText(str);
                     } else {
                         Log.d("FireStore", "No such document");

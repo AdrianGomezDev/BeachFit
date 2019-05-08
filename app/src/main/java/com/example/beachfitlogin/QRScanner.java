@@ -90,6 +90,9 @@ public class QRScanner extends Fragment{
             }
         });
 
+        TextView qrTips = view.findViewById(R.id.qrTips);
+        qrTips.setText("1. Find a BeachFit QR code in the CSULB gym\n\n2. Press the Scan QR button\n\n3. Point the camera at the QR code");
+
         // Inflate the layout for this fragment
         return view;
     }

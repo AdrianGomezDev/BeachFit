@@ -20,8 +20,8 @@
     <string name="navigation_drawer_close">Drawer Close</string>
     <string name="title_activity_home">BeachFit</string>
     <string name="home_blank_text">Home Fragment Test String</string>
-    <string name="hint_email">\u0020 Enter Email</string>
-    <string name="hint_password">\u0020  Enter Password</string>
+    <string name="hint_email">\u0020Enter Email</string>
+    <string name="hint_password">\u0020Enter Password</string>
     <string name="sign_out">Sign Out</string>
     <string name="verify_email">Verify Email</string>
     <string name="create_account">Create Account</string>
@@ -45,7 +45,7 @@
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_user_exists">Email already used.</string>
     <string name="error_mismatched_passwords">Passwords must match.</string>
-    <string name="error_invalid_age">Age must be between 1-99.</string>
+    <string name="error_invalid_age">Age must be between 1–99.</string>
     <string name="required_field">Required.</string>
     <string name="log_meal">Log Meal</string>
     <string name="search_food_database">Search Food Database</string>

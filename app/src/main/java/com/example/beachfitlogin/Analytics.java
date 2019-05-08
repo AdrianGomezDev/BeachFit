@@ -88,8 +88,8 @@ public class Analytics extends Fragment{
 
         ArrayList NoOfEmp = new ArrayList();
 
-        NoOfEmp.add(new BarEntry(945f, 0, 2008));
-        NoOfEmp.add(new BarEntry(1040f, 1, 2009));
+        NoOfEmp.add(new BarEntry(945f, 0));
+        NoOfEmp.add(new BarEntry(1040f, 1));
         NoOfEmp.add(new BarEntry(1133f, 2));
         NoOfEmp.add(new BarEntry(1240f, 3));
         NoOfEmp.add(new BarEntry(1369f, 4));
