@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
@@ -105,6 +106,11 @@ public class GoalPage extends Fragment{
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                        .update("points", FieldValue.increment(goalModel.getPointsVal()));
+
                 FirebaseFirestore.getInstance().collection("users")
                         .document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                         .collection("Goal Logs")
