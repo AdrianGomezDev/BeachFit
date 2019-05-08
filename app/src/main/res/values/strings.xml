@@ -85,4 +85,15 @@
     <string name="nameofreward">Name:</string>
     <string name="rewardname">Enter Name of Reward</string>
     <string name="dateofreward">Date of Reward</string>
+    <string name="num_hint">####</string>
+    <string name="exercise_label">Exercise</string>
+    <string name="name_edit">Name</string>
+    <string name="points_value">Points Value</string>
+    <string name="goalnamepage">Goal Name</string>
+    <string name="exercise">Exercise:</string>
+    <string name="exname">Exercise Name</string>
+    <string name="points_values">Points Value:</string>
+    <string name="status">Status:</string>
+    <string name="complete_exclamation">Complete!</string>
+    <string name="back">BACK</string>
 </resources>

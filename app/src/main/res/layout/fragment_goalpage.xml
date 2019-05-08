@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".Exercise">
+    android:background="@color/colorAccent"
+    tools:context=".GoalPage">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/exercise_name"
+            android:text="@string/goalnamepage"
             android:textColor="@color/colorBlack"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/type"
+            android:text="@string/exercise"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/exercise_text_view"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/exercise_type"
+            android:text="@string/exname"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/level"
+            android:text="@string/points_values"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/level_text_view"
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/exercise_level"
+            android:text="@string/points_value"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/muscle"
+            android:text="@string/status"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/muscle_text_view"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/main_muscle_worked"
+            android:text="@string/status"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,77 +111,32 @@
             app:layout_constraintStart_toEndOf="@+id/status_label"
             app:layout_constraintTop_toBottomOf="@+id/level_text_view" />
 
-        <TextView
-            android:id="@+id/equipment_label"
+        <Button
+            android:id="@+id/completeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/equipment"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/equipment_text_view"
+            android:text="@string/complete_exclamation"
+            android:background="@drawable/round"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/status_label" />
 
-        <TextView
-            android:id="@+id/equipment_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/equipment_needed"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/equipment_label"
-            app:layout_constraintTop_toBottomOf="@+id/muscle_text_view" />
-
-        <TextView
-            android:id="@+id/instructions_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="@string/instructions"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playVideoButton" />
-
-        <ListView
-            android:id="@+id/instructions_list_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#FFFFFF"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="10.0sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/instructions_label" />
-
         <Button
-            android:id="@+id/playVideoButton"
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/watch_video"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/equipment_label" />
+            android:background="@drawable/round"
+            android:layout_marginTop="32dp"
+            android:text="@string/back"
+            app:layout_constraintStart_toStartOf="@id/completeButton"
+            app:layout_constraintTop_toBottomOf="@+id/completeButton"/>
+
+
+
+
 
     </android.support.constraint.ConstraintLayout>
 

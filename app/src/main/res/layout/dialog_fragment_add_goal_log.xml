@@ -29,9 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/nameofgoal"
-            android:textSize="14sp"
             android:inputType="text"
             android:longClickable="false"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/dateOfGoalEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -53,13 +53,55 @@
             android:id="@+id/dateOfGoalEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/mm_dd_yyyy"
-            android:textSize="14sp"
-            android:longClickable="false"
             android:background="?attr/editTextBackground"
+            android:hint="@string/mm_dd_yyyy"
+            android:longClickable="false"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/goalNameEditText"
             app:layout_constraintTop_toBottomOf="@+id/goalNameEditText" />
+
+        <TextView
+            android:id="@+id/exerciseNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exercise_label"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner"
+            app:layout_constraintEnd_toEndOf="@id/dateOfMealLabel"
+            app:layout_constraintTop_toTopOf="@+id/spinner" />
+
+
+
+        <TextView
+            android:id="@+id/pointsValNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/points_value"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/pointsValNameEditText"
+            app:layout_constraintEnd_toEndOf="@id/exerciseNameLabel"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseNameLabel" />
+
+        <EditText
+            android:id="@+id/pointsValNameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="@string/num_hint"
+            android:inputType="number"
+            android:longClickable="false"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/spinner"
+            app:layout_constraintTop_toBottomOf="@id/spinner"
+            />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/dateOfGoalEditText"
+            app:layout_constraintTop_toBottomOf="@id/dateOfGoalEditText"/>
 
     </android.support.constraint.ConstraintLayout>
 

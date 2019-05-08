@@ -181,5 +181,13 @@ public class NavigationActivity extends AppCompatActivity
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+        else if(TAG.equals("Goals")){
+            GoalPage newFragment = GoalPage.newInstance(data.toString());
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, newFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
     }
 }
